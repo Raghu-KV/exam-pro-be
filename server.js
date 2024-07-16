@@ -1,0 +1,45 @@
+import express from "express";
+import * as dotenv from "dotenv";
+import mongoose from "mongoose";
+import cors from "cors";
+
+// import files dhould end with .js
+import { logger, logEvents } from "./middleware/logger.js";
+import { router as rootRouter } from "./routes/root.routes.js";
+import { router as examTypeRouter } from "./routes/exam-type.routes.js";
+import { router as studentsRouter } from "./routes/students.routes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { connectToDb } from "./config/dbConnection.js";
+import { corsOptions } from "./config/corsOptions.js";
+
+dotenv.config();
+const app = express();
+
+const PORT = process.env.PORT;
+connectToDb();
+
+//MIDDLEWARES
+app.use(logger);
+app.use(cors(corsOptions));
+app.use(express.json());
+
+// ROUTES
+app.use("/", rootRouter);
+app.use("/exam-type", examTypeRouter);
+app.use("/students", studentsRouter);
+
+app.all("*", (req, res) => {
+  res.status(404).json({ message: "404 Not found" });
+});
+
+app.use(errorHandler);
+
+mongoose.connection.once("open", () => {
+  console.log("Mongo connected!");
+  app.listen(PORT, () => console.log(`server running on port : ${PORT}`));
+});
+
+mongoose.connection.on("error", (error) => {
+  console.log(error);
+  logEvents(`${error.errorResponse.errmsg}`, "mongoErrLog.log");
+});
