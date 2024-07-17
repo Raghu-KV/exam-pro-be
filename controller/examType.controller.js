@@ -62,7 +62,7 @@ export const getExamTypeById = asyncHandler(async (req, res) => {
   res.json(examTypeById);
 });
 
-// @desc get all exam type
+// @desc get all exam type with pagination
 // @route GET /exam-type
 // @access private
 export const getAllExamType = asyncHandler(async (req, res) => {
@@ -128,4 +128,14 @@ export const getAllExamType = asyncHandler(async (req, res) => {
   };
 
   res.json(prepareJson);
+});
+
+// @desc get all exam type with no pagination
+// @route GET /exam-type
+// @access private
+export const getExamTypeWithNoPagination = asyncHandler(async (req, res) => {
+  const allExamType = await ExamType.find({})
+    .select("examType examTypeId")
+    .sort({ createdAt: -1 });
+  res.json(allExamType);
 });

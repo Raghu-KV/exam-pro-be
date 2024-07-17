@@ -7,6 +7,7 @@ import {
   deleteExamType,
   getAllExamType,
   getExamTypeById,
+  getExamTypeWithNoPagination,
 } from "../controller/examType.controller.js";
 
 import { joiValidation } from "../middleware/joiValidation.js";
@@ -23,6 +24,8 @@ router
   .route("/")
   .get(getAllExamType)
   .post(joiValidation(postExamTypeSchema), addExamType);
+
+router.route("/all").get(getExamTypeWithNoPagination);
 
 router
   .route("/:id")

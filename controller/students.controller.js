@@ -111,16 +111,7 @@ export const getAllStudents = asyncHandler(async (req, res) => {
 
   const search = req.query.search || "";
 
-  // filter
-  const examTypeId = req.query.exam_type || "";
-  const rollNo = req.query.roll_no || "";
-  const phoneNo = +req.query.phone_no || "";
-  const startDate = req.query.start_date || "";
-  const endDate = req.query.end_date || "";
-
   const isFilter = req.query.filter;
-
-  // query-params=true&search=ss&filter=true&exam_type=12112&roll_no=677&phone_no=12&start_date=2024-07-16&end_date=2024-07-17
 
   if (search) {
     searchAndFilterQuery.push({
@@ -131,11 +122,16 @@ export const getAllStudents = asyncHandler(async (req, res) => {
   }
 
   if (isFilter) {
+    const examTypeId = req.query.exam_type || "";
+    const rollNo = req.query.roll_no || "";
+    const phoneNo = +req.query.phone_no || "";
+    const startDate = req.query.start_date || "";
+    const endDate = req.query.end_date || "";
     if (examTypeId) {
       searchAndFilterQuery.push({ enrolledExamTypeId: examTypeId });
     }
     if (rollNo) {
-      searchAndFilterQuery.push({ $regex: rollNo });
+      searchAndFilterQuery.push({ rollNo: { $regex: rollNo } });
     }
     if (phoneNo) {
       searchAndFilterQuery.push({ phoneNo: { $regex: phoneNo } });
@@ -173,6 +169,11 @@ export const getAllStudents = asyncHandler(async (req, res) => {
   const hasPrevPage = startIndex > 0 ? true : false;
   const hasNextPage = endIndex < totalFilteredDoc ? true : false;
 
+  const populate = [
+    // { path: "enrolledExamType", options: { withDeleted: true } },
+    { path: "enrolledExamType", options: { select: { examType: 1 } } },
+  ];
+
   const examTypeData = await Student.find({
     $and: [
       ...searchAndFilterQuery,
@@ -183,7 +184,9 @@ export const getAllStudents = asyncHandler(async (req, res) => {
   })
     .skip(startIndex)
     .limit(limit)
-    .sort({ createdAt: -1 });
+    .populate(populate)
+    .sort({ createdAt: -1 })
+    .lean();
 
   const totalPage = Math.ceil(totalFilteredDoc / limit);
 
