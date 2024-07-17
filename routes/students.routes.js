@@ -22,13 +22,13 @@ router
   .post(joiValidation(postStudentSchema), addStudent);
 
 router
+  .route("/reset-password/:id")
+  .patch(joiValidation(deleteStudentSchema), resetPassword);
+
+router
   .route("/:id")
   .get(joiValidation(deleteStudentSchema), getSingleStudent)
   .patch(joiValidation(updateStudentSchema), updateStudent)
   .delete(joiValidation(deleteStudentSchema), deleteStudent);
-
-router
-  .route("/reset-password/:id")
-  .patch(joiValidation(deleteStudentSchema), resetPassword);
 
 export { router };

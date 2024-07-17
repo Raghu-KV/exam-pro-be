@@ -5,12 +5,15 @@ import cors from "cors";
 
 // import files dhould end with .js
 import { logger, logEvents } from "./middleware/logger.js";
-import { router as rootRouter } from "./routes/root.routes.js";
-import { router as examTypeRouter } from "./routes/exam-type.routes.js";
-import { router as studentsRouter } from "./routes/students.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { connectToDb } from "./config/dbConnection.js";
 import { corsOptions } from "./config/corsOptions.js";
+
+// ROUTES
+import { router as rootRouter } from "./routes/root.routes.js";
+import { router as examTypeRouter } from "./routes/exam-type.routes.js";
+import { router as studentsRouter } from "./routes/students.routes.js";
+import { router as subjectsRouter } from "./routes/subject.routes.js";
 
 dotenv.config();
 const app = express();
@@ -27,6 +30,7 @@ app.use(express.json());
 app.use("/", rootRouter);
 app.use("/exam-type", examTypeRouter);
 app.use("/students", studentsRouter);
+app.use("/subjects", subjectsRouter);
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "404 Not found" });

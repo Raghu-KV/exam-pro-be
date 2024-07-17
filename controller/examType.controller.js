@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 
 import ExamType from "../models/ExamType.model.js";
 import Student from "../models/Student.model.js";
+import Subject from "../models/Subject.model.js";
 
 // @desc add a exam type
 // @route POST /exam-type
@@ -44,15 +45,18 @@ export const deleteExamType = asyncHandler(async (req, res) => {
     enrolledExamTypeId: examTypeData?.examTypeId,
   }).countDocuments();
 
+  const isSubject = await Subject.find({
+    examTypeId: examTypeData?.examTypeId,
+  }).countDocuments();
+
   if (!examTypeData)
     return res.status(404).json({ message: "No exam-type found" });
 
-  if (isStudent)
-    return res
-      .status(404)
-      .json({
-        message: "Could not delete since exam type has students enrolled in it",
-      });
+  if (isStudent || isSubject)
+    return res.status(404).json({
+      message:
+        "Could not delete since exam type has students or subject mapped",
+    });
 
   await examTypeData.deleteOne();
 
@@ -74,7 +78,17 @@ export const getExamTypeById = asyncHandler(async (req, res) => {
   res.json(examTypeById);
 });
 
-// @desc get all exam type with pagination
+// @desc get all exam type with no pagination
+// @route GET /exam-type/all
+// @access private
+export const getExamTypeWithNoPagination = asyncHandler(async (req, res) => {
+  const allExamType = await ExamType.find({})
+    .select("examType examTypeId")
+    .sort({ createdAt: -1 });
+  res.json(allExamType);
+});
+
+// @desc get all exam type
 // @route GET /exam-type
 // @access private
 export const getAllExamType = asyncHandler(async (req, res) => {
@@ -140,14 +154,4 @@ export const getAllExamType = asyncHandler(async (req, res) => {
   };
 
   res.json(prepareJson);
-});
-
-// @desc get all exam type with no pagination
-// @route GET /exam-type
-// @access private
-export const getExamTypeWithNoPagination = asyncHandler(async (req, res) => {
-  const allExamType = await ExamType.find({})
-    .select("examType examTypeId")
-    .sort({ createdAt: -1 });
-  res.json(allExamType);
 });
