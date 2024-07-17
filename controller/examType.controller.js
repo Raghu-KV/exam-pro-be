@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 
 import ExamType from "../models/ExamType.model.js";
+import Student from "../models/Student.model.js";
 
 // @desc add a exam type
 // @route POST /exam-type
@@ -39,8 +40,19 @@ export const deleteExamType = asyncHandler(async (req, res) => {
 
   const examTypeData = await ExamType.findById(id).exec();
 
+  const isStudent = await Student.find({
+    enrolledExamTypeId: examTypeData?.examTypeId,
+  }).countDocuments();
+
   if (!examTypeData)
     return res.status(404).json({ message: "No exam-type found" });
+
+  if (isStudent)
+    return res
+      .status(404)
+      .json({
+        message: "Could not delete since exam type has students enrolled in it",
+      });
 
   await examTypeData.deleteOne();
 
