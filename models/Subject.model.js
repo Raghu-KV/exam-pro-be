@@ -6,6 +6,7 @@ const subjectScheme = new mongoose.Schema(
     subjectName: {
       type: String,
       required: true,
+      unique: [true, "Make subject unique"],
     },
     subjectId: {
       type: String,
