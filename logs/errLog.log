@@ -50,3 +50,9 @@ July 17th 2024, 1:44:50 pm	12034b58-cc7f-4250-ad3c-29c18ea08ec0	MongoServerError
 July 17th 2024, 1:44:57 pm	ea7863dd-5600-4da9-b6ed-eb6e3a97bec4	MongoServerError: E11000 duplicate key error collection: exam.students index: rollNo_1 dup key: { rollNo: "12777" }	POST	/students	http://localhost:3000
 July 17th 2024, 6:01:56 pm	b4db3fbd-7325-4052-819e-d0db02975799	SyntaxError: Expected double-quoted property name in JSON at position 33	POST	/subjects	undefined
 July 17th 2024, 6:44:52 pm	16dd936d-3629-4aef-89ed-8a29226d055c	SyntaxError: Unexpected end of JSON input	GET	/subjects/6697c1edccbb9b658f77947d	undefined
+July 18th 2024, 7:23:34 am	2809f519-9ca4-46ca-95ab-d718a31de358	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/exam-type/all	http://localhost:3000
+July 18th 2024, 7:23:34 am	81effcbe-b436-46af-916d-18d1ff87b1d8	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/students?page=1	http://localhost:3000
+July 18th 2024, 7:23:34 am	9e7239a0-d4ec-4d71-b91c-b6e88d3958da	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/students	http://localhost:3000
+July 18th 2024, 7:23:36 am	41e40fbc-9cda-40f7-8eee-36e87c0802a1	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/exam-type	http://localhost:3000
+July 18th 2024, 7:23:36 am	4e2ea1e6-c3d2-43f7-94ac-41fd32ac1c1f	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/exam-type?page=1	http://localhost:3000
+July 18th 2024, 11:31:31 am	eb3cd279-9cca-4613-a21e-71ded5517826	MongoServerError: E11000 duplicate key error collection: exam.subjects index: subjectName_1 dup key: { subjectName: "new" }	POST	/subjects	http://localhost:3000
