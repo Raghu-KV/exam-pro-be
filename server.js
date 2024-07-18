@@ -14,6 +14,7 @@ import { router as rootRouter } from "./routes/root.routes.js";
 import { router as examTypeRouter } from "./routes/exam-type.routes.js";
 import { router as studentsRouter } from "./routes/students.routes.js";
 import { router as subjectsRouter } from "./routes/subject.routes.js";
+import { router as chapterRouter } from "./routes/chapter.routes.js";
 
 dotenv.config();
 const app = express();
@@ -31,6 +32,7 @@ app.use("/", rootRouter);
 app.use("/exam-type", examTypeRouter);
 app.use("/students", studentsRouter);
 app.use("/subjects", subjectsRouter);
+app.use("/chapters", chapterRouter);
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "404 Not found" });
