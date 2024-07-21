@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import ExamType from "../models/ExamType.model.js";
 import Student from "../models/Student.model.js";
 import Subject from "../models/Subject.model.js";
+import Chapter from "./../models/Chapter.model.js";
 
 // @desc add a exam type
 // @route POST /exam-type
@@ -49,13 +50,17 @@ export const deleteExamType = asyncHandler(async (req, res) => {
     examTypeId: examTypeData?.examTypeId,
   }).countDocuments();
 
+  const isChapter = await Chapter.find({
+    examTypeId: examTypeData?.examTypeId,
+  }).countDocuments();
+
   if (!examTypeData)
     return res.status(404).json({ message: "No exam-type found" });
 
-  if (isStudent || isSubject)
+  if (isStudent || isSubject || isChapter)
     return res.status(404).json({
       message:
-        "Could not delete since exam type has students or subject mapped",
+        "Could not delete since exam type has students, subject, chapter  mapped",
     });
 
   await examTypeData.deleteOne();
