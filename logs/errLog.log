@@ -57,3 +57,6 @@ July 18th 2024, 7:23:36 am	41e40fbc-9cda-40f7-8eee-36e87c0802a1	MongoServerSelec
 July 18th 2024, 7:23:36 am	4e2ea1e6-c3d2-43f7-94ac-41fd32ac1c1f	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/exam-type?page=1	http://localhost:3000
 July 18th 2024, 11:31:31 am	eb3cd279-9cca-4613-a21e-71ded5517826	MongoServerError: E11000 duplicate key error collection: exam.subjects index: subjectName_1 dup key: { subjectName: "new" }	POST	/subjects	http://localhost:3000
 July 18th 2024, 7:49:01 pm	e11f2c99-8c03-45a6-881d-435c33e6676c	CastError: Cast to ObjectId failed for value "all" (type string) at path "_id" for model "Chapter"	GET	/chapters/all	undefined
+July 21st 2024, 7:59:12 pm	5d847fdc-3b8d-47e0-bb3f-6702f821bfe8	MongoServerError: E11000 duplicate key error collection: exam.questions index: question_1 dup key: { question: "what is the bect town?" }	POST	/questions	undefined
+July 21st 2024, 8:12:39 pm	e8080e67-d2fb-4e22-add8-b21e053feddc	ReferenceError: test is not defined	GET	/questions	undefined
+July 21st 2024, 8:15:18 pm	126af90e-ad9d-4ec1-a0a5-d563b62f1168	MongoServerError: $and/$or/$nor must be a nonempty array	GET	/questions	undefined
