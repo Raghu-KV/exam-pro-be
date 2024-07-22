@@ -60,3 +60,15 @@ July 18th 2024, 7:49:01 pm	e11f2c99-8c03-45a6-881d-435c33e6676c	CastError: Cast 
 July 21st 2024, 7:59:12 pm	5d847fdc-3b8d-47e0-bb3f-6702f821bfe8	MongoServerError: E11000 duplicate key error collection: exam.questions index: question_1 dup key: { question: "what is the bect town?" }	POST	/questions	undefined
 July 21st 2024, 8:12:39 pm	e8080e67-d2fb-4e22-add8-b21e053feddc	ReferenceError: test is not defined	GET	/questions	undefined
 July 21st 2024, 8:15:18 pm	126af90e-ad9d-4ec1-a0a5-d563b62f1168	MongoServerError: $and/$or/$nor must be a nonempty array	GET	/questions	undefined
+July 22nd 2024, 11:29:05 am	27e96eb9-7f47-4296-8ffe-a69499e3093e	MongoServerError: E11000 duplicate key error collection: exam.questions index: question_1 dup key: { question: "question 5" }	POST	/questions	http://localhost:3000
+July 22nd 2024, 12:21:33 pm	df5bc0b7-4a76-4426-b81c-3c8eff3d0f84	ReferenceError: explanation is not defined	POST	/questions	http://localhost:3000
+July 22nd 2024, 2:38:14 pm	bfa42e85-3a3c-4fea-901b-510398dc6b88	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/exam-type/all	http://localhost:3000
+July 22nd 2024, 2:38:14 pm	57f8a03c-8e05-4dc5-8adf-775fbfd96007	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/chapters/all	http://localhost:3000
+July 22nd 2024, 2:38:14 pm	b1986f96-b0c7-421c-aee2-1364e964ce41	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/subjects/all	http://localhost:3000
+July 22nd 2024, 2:38:14 pm	0565fa6f-44e2-4fc5-b7d6-5adc38633088	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/questions	http://localhost:3000
+July 22nd 2024, 2:38:14 pm	43681a49-8327-4aa0-919d-c4e2d47e85ea	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/questions?page=1	http://localhost:3000
+July 22nd 2024, 2:38:22 pm	4c1e6ecf-abcf-40c3-b91c-ea7ad4836dbe	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/exam-type/all	http://localhost:3000
+July 22nd 2024, 2:38:22 pm	5fe4f9a4-9462-4e9a-9ba4-27a90f6c0d87	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/subjects/all	http://localhost:3000
+July 22nd 2024, 2:38:22 pm	98e6fa1d-2c0c-4bc0-8959-37389b7e1139	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/chapters/all	http://localhost:3000
+July 22nd 2024, 2:38:22 pm	d771b0c3-5525-413a-8525-5cb5412bb03d	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/questions	http://localhost:3000
+July 22nd 2024, 2:38:22 pm	a013839d-c359-41e0-a830-4b8be4906490	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/questions?page=1	http://localhost:3000
