@@ -16,38 +16,45 @@ const optionScheme = mongoose.Schema({
   },
 });
 
-const questionSchema = mongoose.Schema({
-  questionId: {
-    type: String,
-    default: () => randomUUID(),
-    immutable: true,
+const questionSchema = mongoose.Schema(
+  {
+    questionId: {
+      type: String,
+      default: () => randomUUID(),
+      immutable: true,
+    },
+    question: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    options: {
+      type: [optionScheme],
+      required: true,
+    },
+    answerId: {
+      type: Number,
+      required: true,
+    },
+    subjectId: {
+      type: String,
+      required: true,
+    },
+    chapterId: {
+      type: String,
+      required: true,
+    },
+    examTypeId: {
+      type: String,
+      required: true,
+    },
+    explanation: {
+      type: String,
+      required: false,
+    },
   },
-  question: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  options: {
-    type: [optionScheme],
-    required: true,
-  },
-  answerId: {
-    type: Number,
-    required: true,
-  },
-  subjectId: {
-    type: String,
-    required: true,
-  },
-  chapterId: {
-    type: String,
-    required: true,
-  },
-  examTypeId: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 questionSchema.virtual("examType", {
   ref: "ExamType",

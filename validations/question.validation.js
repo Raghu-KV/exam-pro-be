@@ -13,6 +13,7 @@ export const postQuestionSchema = Joi.object({
   chapterId: Joi.string().required(),
   subjectId: Joi.string().required(),
   examTypeId: Joi.string().required(),
+  explanation: Joi.string().allow(""),
 });
 
 export const patchQuestionSchema = Joi.object({
@@ -25,12 +26,14 @@ export const patchQuestionSchema = Joi.object({
       optionId: Joi.number().valid(0, 1, 2, 3).required(),
       option: Joi.string().required(),
       name: Joi.string().required(),
+      _id: Joi.string().required(),
     })
   ),
   answerId: Joi.number().valid(0, 1, 2, 3).required(),
   chapterId: Joi.string().required(),
   subjectId: Joi.string().required(),
   examTypeId: Joi.string().required(),
+  explanation: Joi.string().allow(""),
 });
 
 export const deleteQuestionSchema = Joi.object({

@@ -6,8 +6,15 @@ import Question from "../models/Qestion.model.js";
 // @route POST /questions
 // @access private
 export const addQuestion = asyncHandler(async (req, res) => {
-  const { question, options, answerId, chapterId, subjectId, examTypeId } =
-    req.body;
+  const {
+    question,
+    options,
+    answerId,
+    chapterId,
+    subjectId,
+    examTypeId,
+    explanation,
+  } = req.body;
 
   const result = await Question.create({
     question,
@@ -16,6 +23,7 @@ export const addQuestion = asyncHandler(async (req, res) => {
     chapterId,
     subjectId,
     examTypeId,
+    explanation,
   });
 
   res.json(result);
@@ -26,8 +34,15 @@ export const addQuestion = asyncHandler(async (req, res) => {
 // @access private
 export const editQuestion = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { question, options, answerId, chapterId, subjectId, examTypeId } =
-    req.body;
+  const {
+    question,
+    options,
+    answerId,
+    chapterId,
+    subjectId,
+    examTypeId,
+    explanation,
+  } = req.body;
 
   const questionData = await Question.findById(id);
 
@@ -40,6 +55,7 @@ export const editQuestion = asyncHandler(async (req, res) => {
   questionData.chapterId = chapterId;
   questionData.examTypeId = examTypeId;
   questionData.subjectId = subjectId;
+  questionData.explanation = explanation;
   const updatedQuestion = await questionData.save();
 
   res.json(updatedQuestion);
