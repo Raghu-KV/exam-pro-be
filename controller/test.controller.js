@@ -1,105 +1,97 @@
 import asyncHandler from "express-async-handler";
+import Test from "../models/Test.model.js";
 
-import Question from "../models/Qestion.model.js";
-
-// @desc add a question
-// @route POST /questions
+// @desc add a test
+// @route POST /tests
 // @access private
-export const addQuestion = asyncHandler(async (req, res) => {
-  const {
-    question,
-    options,
-    answerId,
-    chapterId,
-    subjectId,
-    examTypeId,
-    explanation,
-  } = req.body;
+export const addTest = asyncHandler(async (req, res) => {
+  const { testName, examTypeId } = req.body;
 
-  const result = await Question.create({
-    question,
-    options,
-    answerId,
-    chapterId,
-    subjectId,
-    examTypeId,
-    explanation,
-  });
+  const testData = await Test.create({ testName, examTypeId });
 
-  res.json(result);
+  res.json(testData);
 });
 
-// @desc edit a question
-// @route POST /questions/:id
+// @desc get a test
+// @route GET /test/:id
 // @access private
-export const editQuestion = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const {
-    question,
-    options,
-    answerId,
-    chapterId,
-    subjectId,
-    examTypeId,
-    explanation,
-  } = req.body;
-
-  const questionData = await Question.findById(id);
-
-  if (!questionData)
-    return res.status(404).json({ message: "Could not find the Question" });
-
-  questionData.question = question;
-  questionData.options = options;
-  questionData.answerId = answerId;
-  questionData.chapterId = chapterId;
-  questionData.examTypeId = examTypeId;
-  questionData.subjectId = subjectId;
-  questionData.explanation = explanation;
-  const updatedQuestion = await questionData.save();
-
-  res.json(updatedQuestion);
-});
-
-// @desc delete a Question
-// @route DELETE /questions/:id
-// @access private
-export const deleteQuestion = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  const question = await Question.findById(id);
-
-  if (!question)
-    return res.status(404).json({ message: "Could not find Qyestion" });
-
-  const deleteQuestion = await question.deleteOne();
-
-  res.json(deleteQuestion);
-});
-
-// @desc get a question
-// @route GET /questions/:id
-// @access private
-export const getSingleQuestion = asyncHandler(async (req, res) => {
+export const getSingleTest = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const populate = [
     // { path: "enrolledExamType", options: { withDeleted: true } },
-    { path: "examType" },
-    { path: "subject" },
-    { path: "chapter" },
+    { path: "questions" },
   ];
-  const question = await Question.findById(id).populate(populate).lean();
 
-  if (!question) return res.status(404).json({ message: "No question found" });
+  const test = await Test.findById(id).populate(populate).lean();
 
-  res.json(question);
+  if (!test) return res.status(404).json({ message: "No test found" });
+
+  res.json(test);
 });
 
-// @desc get all question
-// @route GET /questions
+// @desc delete test
+// @route DELETE /tests/:id
 // @access privatete
-export const getAllQuestions = asyncHandler(async (req, res) => {
+export const deleteTest = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const testData = await Test.findById(id);
+
+  if (!testData) return res.status(404).json({ message: "No test found!" });
+
+  if (testData.attendedStudentsId.length) {
+    return res.status(404).json({
+      message: "Could not delete. Students have started attending the test",
+    });
+  }
+
+  const deleteMessage = await testData.deleteOne();
+
+  res.send(deleteMessage);
+});
+
+// @desc delete test
+// @route DELETE /tests/:id
+// @access privatete
+export const updateTest = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { testName, examTypeId } = req.body;
+
+  const testData = await Test.findById(id);
+
+  if (!testData) return res.status(404).json({ message: "No test found!" });
+
+  if (testData.attendedStudentsId.length) {
+    return res.status(404).json({
+      message: "Could not delete. Students have started attending the test",
+    });
+  }
+
+  testData.testName = testName;
+  testData.examTypeId = examTypeId;
+
+  const save = testData.save();
+
+  res.send(save);
+});
+
+// @desc get a test as prefill
+// @route GET /tests/:id
+// @access privatete
+export const prefillTest = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const testData = await Test.findById(id).select("testName examTypeId");
+  if (!testData) return res.status(404).json({ message: "Test not found!" });
+
+  res.json(testData);
+});
+
+// @desc get all tests
+// @route GET /tests
+// @access privatete
+export const getAllTests = asyncHandler(async (req, res) => {
   const page = +req.query.page || 1;
   const limit = 10;
 
@@ -111,10 +103,10 @@ export const getAllQuestions = asyncHandler(async (req, res) => {
 
   if (search) {
     searchAndFilterQuery.push({
-      question: { $regex: search, $options: "i" },
+      testName: { $regex: search, $options: "i" },
     });
   } else {
-    searchAndFilterQuery.push({ question: { $regex: "", $options: "i" } });
+    searchAndFilterQuery.push({ testName: { $regex: "", $options: "i" } });
   }
 
   if (isFilter) {
@@ -148,7 +140,7 @@ export const getAllQuestions = asyncHandler(async (req, res) => {
     }
   }
 
-  const totalFilteredDoc = await Question.find({
+  const totalFilteredDoc = await Test.find({
     $and: [
       ...searchAndFilterQuery,
       // { examType: { $regex: search, $options: "i" } },
@@ -157,7 +149,7 @@ export const getAllQuestions = asyncHandler(async (req, res) => {
     ],
   }).countDocuments();
 
-  const totalDoc = await Question.countDocuments();
+  const totalDoc = await Test.countDocuments();
 
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
@@ -170,11 +162,11 @@ export const getAllQuestions = asyncHandler(async (req, res) => {
   const populate = [
     // { path: "enrolledExamType", options: { withDeleted: true } },
     { path: "examType", options: { select: { examType: 1 } } },
-    { path: "subject", options: { select: { subjectName: 1 } } },
-    { path: "chapter", options: { select: { chapterName: 1 } } },
+    // { path: "subject", options: { select: { subjectName: 1 } } },
+    // { path: "chapter", options: { select: { chapterName: 1 } } },
   ];
 
-  const questionData = await Question.find({
+  const questionData = await Test.find({
     $and: [
       ...searchAndFilterQuery,
       //   { examType: { $regex: search, $options: "i" } },
@@ -186,6 +178,7 @@ export const getAllQuestions = asyncHandler(async (req, res) => {
     .limit(limit)
     .populate(populate)
     .sort({ createdAt: -1 })
+    .select("-questionsId -attendedStudentsId")
     .lean();
 
   const totalPage = Math.ceil(totalFilteredDoc / limit);
