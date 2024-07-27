@@ -18,3 +18,10 @@ export const updateTestSchema = Joi.object({
   testName: Joi.string().required(),
   examTypeId: Joi.string().required(),
 });
+
+export const updateTestTimingSchema = Joi.object({
+  //on params
+  id: Joi.string().required(),
+  // on body
+  testTiming: Joi.number().required(),
+});

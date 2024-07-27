@@ -20,7 +20,7 @@ export const getSingleTest = asyncHandler(async (req, res) => {
 
   const populate = [
     // { path: "enrolledExamType", options: { withDeleted: true } },
-    { path: "questions" },
+    // { path: "questions" },
   ];
 
   const test = await Test.findById(id).populate(populate).lean();
@@ -86,6 +86,31 @@ export const prefillTest = asyncHandler(async (req, res) => {
   if (!testData) return res.status(404).json({ message: "Test not found!" });
 
   res.json(testData);
+});
+
+// @desc updata test timong
+// @route GET /tests/:id/updateTimong
+// @access privatete
+export const updateTiming = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { testTiming } = req.body;
+
+  const testData = await Test.findById(id);
+
+  if (!testData) return res.status(404).json({ message: "No test found!" });
+
+  if (testData.attendedStudentsId.length) {
+    return res.status(404).json({
+      message:
+        "Could not update time. Students have started attending the test",
+    });
+  }
+
+  testData.testTiming = testTiming;
+
+  const save = testData.save();
+
+  res.send(save);
 });
 
 // @desc get all tests

@@ -4,6 +4,7 @@ import {
   deleteTest as deleteTestScheme,
   postTestSchema,
   updateTestSchema,
+  updateTestTimingSchema,
 } from "../validations/test.validation.js";
 import {
   addTest,
@@ -12,6 +13,7 @@ import {
   deleteTest,
   prefillTest,
   updateTest,
+  updateTiming,
 } from "../controller/test.controller.js";
 
 const router = Router();
@@ -25,6 +27,10 @@ router
   .get(joiValidation(deleteTestScheme), getSingleTest);
 
 router.route("/:id/prefill").get(joiValidation(deleteTestScheme), prefillTest);
+
+router
+  .route("/:id/updateTiming")
+  .patch(joiValidation(updateTestTimingSchema), updateTiming);
 
 // all the default routes for test
 

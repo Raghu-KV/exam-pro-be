@@ -19,6 +19,10 @@ const testSchema = mongoose.Schema({
     default: () => randomUUID(),
     immutable: true,
   },
+  testTiming: {
+    type: Number,
+    default: 0,
+  },
   examTypeId: {
     type: String,
     required: true,
