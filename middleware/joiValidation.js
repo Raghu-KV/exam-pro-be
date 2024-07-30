@@ -7,7 +7,7 @@ export const joiValidation = (joiSchema) => {
 
     if (value.error) {
       return res.status(400).json({
-        status: "validation failed",
+        status: "joi validation failed",
         message: value.error.details[0].message,
       });
     } else {

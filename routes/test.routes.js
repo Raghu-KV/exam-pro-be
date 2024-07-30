@@ -3,6 +3,7 @@ import { joiValidation } from "./../middleware/joiValidation.js";
 import {
   deleteTest as deleteTestScheme,
   postTestSchema,
+  updateQuestionsSchema,
   updateTestSchema,
   updateTestTimingSchema,
 } from "../validations/test.validation.js";
@@ -14,6 +15,10 @@ import {
   prefillTest,
   updateTest,
   updateTiming,
+  getQuestionsOnTest,
+  changePublish,
+  getQuestionsOnTestWithNoPagination,
+  updateQuestionsForTest,
 } from "../controller/test.controller.js";
 
 const router = Router();
@@ -31,6 +36,21 @@ router.route("/:id/prefill").get(joiValidation(deleteTestScheme), prefillTest);
 router
   .route("/:id/updateTiming")
   .patch(joiValidation(updateTestTimingSchema), updateTiming);
+
+router
+  .route("/:id/publish")
+  .post(joiValidation(deleteTestScheme), changePublish);
+
+router
+  .route("/:id/updateQuestions")
+  .patch(joiValidation(updateQuestionsSchema), updateQuestionsForTest);
+
+router
+  .route("/:id/getQuestionsNoPagination")
+  .get(joiValidation(deleteTestScheme), getQuestionsOnTestWithNoPagination);
+router
+  .route("/:id/getQuestions")
+  .get(joiValidation(deleteTestScheme), getQuestionsOnTest);
 
 // all the default routes for test
 

@@ -72,3 +72,21 @@ July 22nd 2024, 2:38:22 pm	5fe4f9a4-9462-4e9a-9ba4-27a90f6c0d87	MongoServerSelec
 July 22nd 2024, 2:38:22 pm	98e6fa1d-2c0c-4bc0-8959-37389b7e1139	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/chapters/all	http://localhost:3000
 July 22nd 2024, 2:38:22 pm	d771b0c3-5525-413a-8525-5cb5412bb03d	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/questions	http://localhost:3000
 July 22nd 2024, 2:38:22 pm	a013839d-c359-41e0-a830-4b8be4906490	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-01.iowib3b.mongodb.net	GET	/questions?page=1	http://localhost:3000
+July 28th 2024, 9:41:35 pm	c622a6ba-dd57-4791-9e73-a3b7a815e84d	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/tests/66a3988b10d905bd146ccf26	http://localhost:3000
+July 29th 2024, 10:07:22 am	f8d454ad-ac17-4375-a917-c8467c188240	TypeError: joiSchema.validate is not a function	GET	/tests/669f8c7d22d4e3fadcf52ef3/getQuestions	undefined
+July 29th 2024, 3:58:58 pm	76ad4389-bd69-4a07-8328-a1fa8acc3023	Error: Cannot set headers after they are sent to the client	POST	/tests/669f8c7d22d4e3fadcf52ef3/publish	http://localhost:3000
+July 29th 2024, 7:12:14 pm	fe276695-d409-40ad-8099-d37b179f910a	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/exam-type/all	http://localhost:3000
+July 29th 2024, 7:12:14 pm	3a0bae91-9946-4845-8c23-1e6546410840	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/chapters/all	http://localhost:3000
+July 29th 2024, 7:12:14 pm	786a8aa5-3e3c-4f71-9782-822db5eceb61	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/subjects/all	http://localhost:3000
+July 29th 2024, 7:12:14 pm	5b32a2f9-2e48-45dc-9942-5c34b43a6f6b	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/students	http://localhost:3000
+July 29th 2024, 7:12:14 pm	9bc00522-e032-4b7d-89e9-271a82373d58	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/students?page=1	http://localhost:3000
+July 29th 2024, 7:18:12 pm	2a2f7bad-6ba0-4bdb-bfc2-4d3d865b6548	MongoServerError: E11000 duplicate key error collection: exam.students index: rollNo_1 dup key: { rollNo: "12" }	POST	/students	http://localhost:3000
+July 29th 2024, 7:18:17 pm	2de639aa-891b-4205-bec2-19d52aae0a69	MongoServerError: E11000 duplicate key error collection: exam.students index: rollNo_1 dup key: { rollNo: "12" }	POST	/students	http://localhost:3000
+July 29th 2024, 7:18:25 pm	9b26bba4-fd32-4ce9-9788-631a5168a860	MongoServerError: E11000 duplicate key error collection: exam.students index: rollNo_1 dup key: { rollNo: "12" }	POST	/students	http://localhost:3000
+July 29th 2024, 7:18:35 pm	a6feb2c0-88d6-4bb3-ba28-044b22e8c089	MongoServerError: E11000 duplicate key error collection: exam.students index: rollNo_1 dup key: { rollNo: "12" }	POST	/students	http://localhost:3000
+July 29th 2024, 7:32:24 pm	73acf380-c291-414f-be70-204099254232	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/questions?page=1	http://localhost:3000
+July 29th 2024, 7:32:24 pm	488d0861-5f21-4d01-9ea9-898f94d998ad	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/questions	http://localhost:3000
+July 30th 2024, 7:14:47 pm	69c5e0b4-faee-4523-8831-e53232947559	TypeError: Cannot read properties of undefined (reading 'length')	PATCH	/tests/669f8c7d22d4e3fadcf52ef3/updateQuestions	http://localhost:3000
+July 30th 2024, 7:22:41 pm	779b174a-7c6b-4c7e-85c7-b308a087491a	Error: Cannot set headers after they are sent to the client	POST	/tests/669f8c7d22d4e3fadcf52ef3/publish	http://localhost:3000
+July 30th 2024, 7:22:51 pm	e5429d87-306e-4df2-9593-17533ad4a098	Error: Cannot set headers after they are sent to the client	POST	/tests/669f8c7d22d4e3fadcf52ef3/publish	http://localhost:3000
+July 30th 2024, 7:27:50 pm	74708f0d-7d10-42df-a313-2267ece70e0e	Error: Cannot set headers after they are sent to the client	POST	/tests/66a3988b10d905bd146ccf26/publish	http://localhost:3000
