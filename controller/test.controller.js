@@ -353,6 +353,15 @@ export const getAllTests = asyncHandler(async (req, res) => {
     const chapterId = req.query.chapter || "";
     const startDate = req.query.start_date || "";
     const endDate = req.query.end_date || "";
+    const publishStatus = req.query.publish_status || "";
+
+    if(publishStatus){
+      if(publishStatus === "published"){
+        searchAndFilterQuery.push({isPublished:true})
+      }else if(publishStatus === "notPublished"){
+        searchAndFilterQuery.push({isPublished:false})
+      }
+    }
 
     if (examTypeId) {
       searchAndFilterQuery.push({ examTypeId: examTypeId });
@@ -373,7 +382,7 @@ export const getAllTests = asyncHandler(async (req, res) => {
       const addedOneDay = monthYear.join("-");
 
       searchAndFilterQuery.push({
-        createdAt: { $gte: new Date(startDate), $lt: new Date(addedOneDay) },
+        publishedAt: { $gte: new Date(startDate), $lt: new Date(addedOneDay) },
       });
     }
   }
