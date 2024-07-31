@@ -14,7 +14,11 @@ import {
   updateStudent,
 } from "../controller/students.controller.js";
 
+import { verifyJwt } from "./../middleware/verifyJwt.js";
+
 const router = Router();
+
+router.use(verifyJwt);
 
 router
   .route("/")

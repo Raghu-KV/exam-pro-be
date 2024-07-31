@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 // import files dhould end with .js
 import { logger, logEvents } from "./middleware/logger.js";
@@ -17,6 +18,8 @@ import { router as subjectsRouter } from "./routes/subject.routes.js";
 import { router as chapterRouter } from "./routes/chapter.routes.js";
 import { router as questionRouter } from "./routes/question.routes.js";
 import { router as testRouter } from "./routes/test.routes.js";
+import { router as userRouter } from "./routes/user.routes.js";
+import { router as authRouter } from "./routes/auth.routes.js";
 
 dotenv.config();
 const app = express();
@@ -25,6 +28,7 @@ const PORT = process.env.PORT;
 connectToDb();
 
 //MIDDLEWARES
+app.use(cookieParser());
 app.use(logger);
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -37,6 +41,8 @@ app.use("/subjects", subjectsRouter);
 app.use("/chapters", chapterRouter);
 app.use("/questions", questionRouter);
 app.use("/tests", testRouter);
+app.use("/users", userRouter);
+app.use("/auth", authRouter);
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "404 Not found" });

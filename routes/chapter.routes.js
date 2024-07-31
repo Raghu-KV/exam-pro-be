@@ -15,7 +15,11 @@ import {
   getSingleChapter,
 } from "../controller/chapter.controller.js";
 
+import { verifyJwt } from "./../middleware/verifyJwt.js";
+
 const router = Router();
+
+router.use(verifyJwt);
 
 router
   .route("/")

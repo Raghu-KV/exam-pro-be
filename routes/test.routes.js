@@ -21,7 +21,11 @@ import {
   updateQuestionsForTest,
 } from "../controller/test.controller.js";
 
+import { verifyJwt } from "./../middleware/verifyJwt.js";
+
 const router = Router();
+
+router.use(verifyJwt);
 
 router.route("/").get(getAllTests).post(joiValidation(postTestSchema), addTest);
 

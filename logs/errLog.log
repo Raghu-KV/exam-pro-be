@@ -90,3 +90,17 @@ July 30th 2024, 7:14:47 pm	69c5e0b4-faee-4523-8831-e53232947559	TypeError: Canno
 July 30th 2024, 7:22:41 pm	779b174a-7c6b-4c7e-85c7-b308a087491a	Error: Cannot set headers after they are sent to the client	POST	/tests/669f8c7d22d4e3fadcf52ef3/publish	http://localhost:3000
 July 30th 2024, 7:22:51 pm	e5429d87-306e-4df2-9593-17533ad4a098	Error: Cannot set headers after they are sent to the client	POST	/tests/669f8c7d22d4e3fadcf52ef3/publish	http://localhost:3000
 July 30th 2024, 7:27:50 pm	74708f0d-7d10-42df-a313-2267ece70e0e	Error: Cannot set headers after they are sent to the client	POST	/tests/66a3988b10d905bd146ccf26/publish	http://localhost:3000
+July 31st 2024, 10:37:33 am	962eff77-ee82-48c0-a42f-531fdb85155a	Error: read ECONNRESET	GET	/questions?page=1	http://localhost:3000
+July 31st 2024, 10:37:47 am	c986440a-d211-47dc-b6cc-7cd824fb3a65	Error: read ECONNRESET	GET	/chapters?page=1	http://localhost:3000
+July 31st 2024, 10:37:54 am	0beb15c9-2683-47bd-b1cb-bc2cb44e301a	Error: read ECONNRESET	GET	/subjects/all	http://localhost:3000
+July 31st 2024, 10:37:54 am	12ab4be7-4756-448e-87cb-c470a996251a	Error: read ECONNRESET	GET	/chapters/all	http://localhost:3000
+July 31st 2024, 10:37:55 am	51c20385-8c18-44ce-a2dc-f0906bfd6243	Error: read ECONNRESET	GET	/tests?page=1	http://localhost:3000
+July 31st 2024, 10:39:15 am	cdb0f30a-3aaa-4a54-90dd-a2bcb4464c9a	Error: read ECONNRESET	GET	/exam-type/all	http://localhost:3000
+July 31st 2024, 10:40:44 am	976a276a-48f4-458e-a054-dd4e0a071051	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/subjects/all	http://localhost:3000
+July 31st 2024, 10:40:44 am	411440d8-c7f3-4591-84cd-0d85283ed264	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/chapters/all	http://localhost:3000
+July 31st 2024, 10:40:44 am	15e3bdd8-1d7e-47fc-a5a0-6499eb31351b	MongoServerSelectionError: getaddrinfo ENOTFOUND ac-i3mbrcs-shard-00-00.iowib3b.mongodb.net	GET	/exam-type	http://localhost:3000
+July 31st 2024, 11:47:20 am	57ce36c8-d243-4e16-8e79-ec3fcb7dfa5d	Error: Cannot set headers after they are sent to the client	POST	/tests/66a3988b10d905bd146ccf26/publish	http://localhost:3000
+July 31st 2024, 11:47:22 am	89dec805-50c6-401e-aaaa-532c0b1d1fa4	Error: Cannot set headers after they are sent to the client	POST	/tests/66a3988b10d905bd146ccf26/publish	http://localhost:3000
+July 31st 2024, 4:12:51 pm	994edd0c-ba90-4afd-b391-562d0cd1d41d	ReferenceError: myPlaintextPassword is not defined	POST	/users/register	undefined
+July 31st 2024, 7:22:40 pm	39abc474-930a-4d9b-8114-64bdd5446847	TypeError: Cannot read properties of undefined (reading 'startsWith')	GET	/exam-type/all	undefined
+July 31st 2024, 7:23:51 pm	0e5b8122-33c0-4947-9f2c-3b474ae79227	TypeError: Cannot read properties of undefined (reading 'split')	GET	/exam-type/all	undefined

@@ -13,7 +13,11 @@ import {
   getSingleQuestion,
 } from "../controller/question.controller.js";
 
+import { verifyJwt } from "./../middleware/verifyJwt.js";
+
 const router = Router();
+
+router.use(verifyJwt);
 
 router
   .route("/")
