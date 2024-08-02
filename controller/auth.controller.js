@@ -32,7 +32,7 @@ export const login = asyncHandler(async (req, res) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "10s" }
+    { expiresIn: "1h" }
   );
 
   const refershToken = jwt.sign(
@@ -44,7 +44,7 @@ export const login = asyncHandler(async (req, res) => {
       },
     },
     process.env.REFERSH_TOKEN_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "2d" }
   );
 
   res.cookie("jwt", refershToken, {

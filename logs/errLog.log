@@ -104,3 +104,5 @@ July 31st 2024, 11:47:22 am	89dec805-50c6-401e-aaaa-532c0b1d1fa4	Error: Cannot s
 July 31st 2024, 4:12:51 pm	994edd0c-ba90-4afd-b391-562d0cd1d41d	ReferenceError: myPlaintextPassword is not defined	POST	/users/register	undefined
 July 31st 2024, 7:22:40 pm	39abc474-930a-4d9b-8114-64bdd5446847	TypeError: Cannot read properties of undefined (reading 'startsWith')	GET	/exam-type/all	undefined
 July 31st 2024, 7:23:51 pm	0e5b8122-33c0-4947-9f2c-3b474ae79227	TypeError: Cannot read properties of undefined (reading 'split')	GET	/exam-type/all	undefined
+August 1st 2024, 7:10:30 pm	802ceba7-99ee-43d4-8db1-41ba58f97965	Too many request : To many attempts to login	POST	/
+August 1st 2024, 7:10:31 pm	90952e35-bbb3-4be3-9410-c081400d657e	Too many request : To many attempts to login	POST	/
