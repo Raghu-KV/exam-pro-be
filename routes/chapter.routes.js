@@ -13,6 +13,7 @@ import {
   getAllChapters,
   getAllChaptersWithNoPagination,
   getSingleChapter,
+  getSingleChapterView,
 } from "../controller/chapter.controller.js";
 
 import { verifyJwt } from "./../middleware/verifyJwt.js";
@@ -27,6 +28,10 @@ router
   .post(joiValidation(postChapterSchema), addChapter);
 
 router.route("/all").get(getAllChaptersWithNoPagination);
+
+router
+  .route("/view/:id")
+  .get(joiValidation(deleteChapterSchema), getSingleChapterView);
 
 router
   .route("/:id")

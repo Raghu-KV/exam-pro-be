@@ -9,8 +9,6 @@ export const verifyJwt = (req, res, next) => {
 
   const token = authHeader.split(" ")[1];
 
-  console.log(token, "POSTMABN");
-
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
     if (error) {
       console.log(error);

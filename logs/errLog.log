@@ -106,3 +106,12 @@ July 31st 2024, 7:22:40 pm	39abc474-930a-4d9b-8114-64bdd5446847	TypeError: Canno
 July 31st 2024, 7:23:51 pm	0e5b8122-33c0-4947-9f2c-3b474ae79227	TypeError: Cannot read properties of undefined (reading 'split')	GET	/exam-type/all	undefined
 August 1st 2024, 7:10:30 pm	802ceba7-99ee-43d4-8db1-41ba58f97965	Too many request : To many attempts to login	POST	/
 August 1st 2024, 7:10:31 pm	90952e35-bbb3-4be3-9410-c081400d657e	Too many request : To many attempts to login	POST	/
+August 3rd 2024, 5:54:49 pm	2ef76e11-b4b7-4350-aae5-ed1c9debe8d2	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Subject"	GET	/subjects/[object%20Object]	http://localhost:3000
+August 3rd 2024, 5:54:49 pm	9bd8f08b-4d05-49ad-a3b3-9d5198a67187	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Subject"	GET	/subjects/[object%20Object]	http://localhost:3000
+August 3rd 2024, 5:57:09 pm	ff4e2b40-49cc-4535-af95-1b105528ddb3	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Subject"	GET	/subjects/[object%20Object]	http://localhost:3000
+August 3rd 2024, 5:57:18 pm	bafa5980-79aa-402f-bef6-98381ac084b7	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Subject"	GET	/subjects/[object%20Object]	http://localhost:3000
+August 3rd 2024, 5:57:18 pm	c7aa59c3-2377-4460-9a42-50e0058f76cc	CastError: Cast to ObjectId failed for value "[object Object]" (type string) at path "_id" for model "Subject"	GET	/subjects/[object%20Object]	http://localhost:3000
+August 3rd 2024, 5:59:58 pm	da8fb80d-f508-4b28-801a-1bb295eed03e	CastError: Cast to ObjectId failed for value "undefinedundefined" (type string) at path "_id" for model "Subject"	GET	/subjects/undefinedundefined	http://localhost:3000
+August 3rd 2024, 6:03:01 pm	d360e554-1116-4b69-b120-e9d290329003	CastError: Cast to ObjectId failed for value "undefinedundefined" (type string) at path "_id" for model "Subject"	GET	/subjects/undefinedundefined	http://localhost:3000
+August 3rd 2024, 6:03:08 pm	b58befe4-a4da-47a3-8ef9-ad0e7fc01ade	CastError: Cast to ObjectId failed for value "undefinedundefined" (type string) at path "_id" for model "Subject"	GET	/subjects/undefinedundefined	http://localhost:3000
+August 3rd 2024, 7:34:03 pm	468baa0a-1eb5-43cc-bab7-898ac3f8b7a3	Error: Cannot set headers after they are sent to the client	POST	/tests/669f8c7d22d4e3fadcf52ef3/publish	http://localhost:3000

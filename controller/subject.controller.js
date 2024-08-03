@@ -72,6 +72,23 @@ export const getSingleSubject = asyncHandler(async (req, res) => {
 
   if (!subject) return res.status(404).json({ message: "No subject found" });
 
+  res.json(subject);
+});
+
+// @desc get a Subject
+// @route GET /subjects/view/:id
+// @access private
+export const getSingleSubjectView = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const populate = [
+    // { path: "enrolledExamType", options: { withDeleted: true } },
+    { path: "examType" },
+  ];
+  const subject = await Subject.findById(id).populate(populate).lean();
+
+  if (!subject) return res.status(404).json({ message: "No subject found" });
+
   // res.json(subject);
   // search comap
 

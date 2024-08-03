@@ -66,6 +66,24 @@ export const getSingleChapter = asyncHandler(async (req, res) => {
 
   if (!chapter) return res.status(404).json({ message: "No chapter found" });
 
+  res.json(chapter);
+});
+
+// @desc get a chapter
+// @route GET /chapters/view/:id
+// @access private
+export const getSingleChapterView = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const populate = [
+    // { path: "enrolledExamType", options: { withDeleted: true } },
+    { path: "examType" },
+    { path: "subject" },
+  ];
+  const chapter = await Chapter.findById(id).populate(populate).lean();
+
+  if (!chapter) return res.status(404).json({ message: "No chapter found" });
+
   // res.json(chapter);
 
   const page = +req.query.page || 1;
