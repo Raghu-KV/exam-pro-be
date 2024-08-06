@@ -21,6 +21,10 @@ import { router as testRouter } from "./routes/test.routes.js";
 import { router as userRouter } from "./routes/user.routes.js";
 import { router as authRouter } from "./routes/auth.routes.js";
 
+// STUDENT ROUTES
+import { router as studentAuthRouter } from "./routes/studentAppRoutes/student.auth.routes.js";
+import { router as studentTestRouter } from "./routes/studentAppRoutes/student.tests.routes.js";
+
 dotenv.config();
 const app = express();
 
@@ -33,7 +37,7 @@ app.use(logger);
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// ROUTES
+// ADMIN ROUTES
 app.use("/", rootRouter);
 app.use("/exam-type", examTypeRouter);
 app.use("/students", studentsRouter);
@@ -43,6 +47,10 @@ app.use("/questions", questionRouter);
 app.use("/tests", testRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
+
+// STUDENT ROUTES
+app.use("/student/auth", studentAuthRouter);
+app.use("/student/tests", studentTestRouter);
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "404 Not found" });

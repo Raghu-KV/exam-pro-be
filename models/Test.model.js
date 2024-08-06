@@ -49,7 +49,7 @@ const testSchema = mongoose.Schema(
 
 testSchema.virtual("questions", {
   ref: "Question",
-  localField: "questionsId.questionId",
+  localField: "questionsId",
   foreignField: "questionId",
 });
 

@@ -57,7 +57,7 @@ export const login = asyncHandler(async (req, res) => {
   res.json({ accessToken });
 });
 
-// @desc get refrrsh token
+// @desc get refresh token
 // @route POST /auth/refersh
 // @access public - because access token has expired
 export const refersh = async (req, res) => {
