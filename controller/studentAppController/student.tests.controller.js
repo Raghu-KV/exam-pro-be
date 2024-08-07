@@ -150,6 +150,8 @@ export const getAllTestsForStudent = asyncHandler(async (req, res) => {
 export const getSingleTest = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
+  const studentId = req.studentId;
+
   const populate = [{ path: "questions", select: "question options" }];
 
   const test = await Test.findById(id)
@@ -159,6 +161,17 @@ export const getSingleTest = asyncHandler(async (req, res) => {
 
   if (!test) {
     return res.status(404).json({ message: "Test not found" });
+  }
+
+  const isAttended = await Test.findOne({
+    _id: id,
+    attendedStudentsId: { $in: [studentId] },
+  }).countDocuments();
+
+  if (isAttended) {
+    return res
+      .status(404)
+      .json({ message: "You have already attended this test!!" });
   }
 
   res.json(test);
