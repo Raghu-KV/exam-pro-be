@@ -1,20 +1,31 @@
 import { Router } from "express";
 import {
-  getAllTestsForStudent,
+  getAllCompletedTestsForStudent,
+  getAllUpcomingTestsForStudent,
   getSingleTest,
+  postAnswer,
 } from "../../controller/studentAppController/student.tests.controller.js";
 import { verifyJwt } from "../../middleware/verifyStudentJwt.js";
 import { joiValidation } from "./../../middleware/joiValidation.js";
-import { getSingleTestSchema } from "./../../validations/studentAppValidation/student.tests.validation.js";
+import {
+  getSingleTestSchema,
+  postAnswerScheme,
+} from "./../../validations/studentAppValidation/student.tests.validation.js";
 
 const router = Router();
 
 router.use(verifyJwt);
 
-router.route("/upcomingTests").get(getAllTestsForStudent);
+router.route("/upcomingTests").get(getAllUpcomingTestsForStudent);
+
+router.route("/completedTests").get(getAllCompletedTestsForStudent);
 
 router
   .route("/upcomingTests/:id")
   .get(joiValidation(getSingleTestSchema), getSingleTest);
+
+router
+  .route("/submitAnswers/:id")
+  .post(joiValidation(postAnswerScheme), postAnswer);
 
 export { router };
