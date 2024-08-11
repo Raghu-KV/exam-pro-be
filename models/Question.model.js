@@ -77,6 +77,13 @@ questionSchema.virtual("chapter", {
   justOne: true,
 });
 
+questionSchema.virtual("answer", {
+  ref: "Answer",
+  localField: "questionId",
+  foreignField: "answers.questionId",
+  justOne: true,
+});
+
 const Question = mongoose.model("Question", questionSchema);
 
 export default Question;

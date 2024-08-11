@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Test from "../models/Test.model.js";
 import Student from "./../models/Student.model.js";
-import Question from "./../models/Qestion.model.js";
+import Question from "./../models/Question.model.js";
 
 // @desc add a test
 // @route POST /tests
@@ -158,11 +158,9 @@ export const updateQuestionsForTest = asyncHandler(async (req, res) => {
   if (!testData) return res.status(404).json({ message: "No test found!" });
 
   if (testData.attendedStudentsId.length)
-    return res
-      .status(404)
-      .json({
-        message: "Could not update. Students have started attending the test",
-      });
+    return res.status(404).json({
+      message: "Could not update. Students have started attending the test",
+    });
 
   const questionsId = req.body.questionsId;
 
@@ -355,11 +353,11 @@ export const getAllTests = asyncHandler(async (req, res) => {
     const endDate = req.query.end_date || "";
     const publishStatus = req.query.publish_status || "";
 
-    if(publishStatus){
-      if(publishStatus === "published"){
-        searchAndFilterQuery.push({isPublished:true})
-      }else if(publishStatus === "notPublished"){
-        searchAndFilterQuery.push({isPublished:false})
+    if (publishStatus) {
+      if (publishStatus === "published") {
+        searchAndFilterQuery.push({ isPublished: true });
+      } else if (publishStatus === "notPublished") {
+        searchAndFilterQuery.push({ isPublished: false });
       }
     }
 

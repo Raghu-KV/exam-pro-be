@@ -4,14 +4,13 @@ import { randomUUID } from "crypto";
 const studentAnswerScheme = mongoose.Schema({
   answerId: {
     type: Number,
-    required: true,
   },
   questionId: {
     type: String,
     required: true,
   },
   isCorrect: {
-    typr: Boolean,
+    type: Boolean,
   },
 });
 
@@ -55,6 +54,15 @@ const answerSchema = mongoose.Schema({
   mistakePercent: {
     type: Number,
   },
+  unattendedPercentage: {
+    type: Number,
+  },
+});
+
+answerSchema.virtual("question", {
+  ref: "Question",
+  localField: "answers.questionId",
+  foreignField: "questionId",
 });
 
 const Answer = mongoose.model("Answer", answerSchema);

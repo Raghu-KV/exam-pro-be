@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 
-import Question from "../models/Qestion.model.js";
+import Question from "../models/Question.model.js";
 
 // @desc add a question
 // @route POST /questions

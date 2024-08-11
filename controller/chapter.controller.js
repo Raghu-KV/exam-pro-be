@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 
 import Chapter from "../models/Chapter.model.js";
 
-import Question from "../models/Qestion.model.js";
+import Question from "../models/Question.model.js";
 
 // @desc add a chapter
 // @route POST /chapters

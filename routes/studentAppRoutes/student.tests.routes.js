@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getAllCompletedTestsForStudent,
   getAllUpcomingTestsForStudent,
+  getInsight,
   getSingleTest,
   postAnswer,
 } from "../../controller/studentAppController/student.tests.controller.js";
@@ -19,6 +20,8 @@ router.use(verifyJwt);
 router.route("/upcomingTests").get(getAllUpcomingTestsForStudent);
 
 router.route("/completedTests").get(getAllCompletedTestsForStudent);
+
+router.route("/completedTests/:testId/insight").get(getInsight);
 
 router
   .route("/upcomingTests/:id")
