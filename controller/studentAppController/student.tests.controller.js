@@ -1,8 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Test from "../../models/Test.model.js";
 import Answer from "./../../models/Answer.model.js";
-import Question from "../../models/Question.model.js";
-
+import Question from "./../../models/Question.model.js";
 // @desc get all upcoming tests
 // @route GET /student/tests/upcomingTests
 // @access private
@@ -579,10 +578,146 @@ export const postAnswer = asyncHandler(async (req, res) => {
 // @route GET /student/tests/completedTests/:testId/insight
 // @access private
 
+// ❗❗ DONT DELETE THE BELOW CODE
+// export const getInsight = asyncHandler(async (req, res) => {
+//   const { testId } = req.params;
+//   const studentId = req.studentId;
+
+//   const foundTest = await Test.findOne({
+//     _id: testId,
+//     attendedStudentsId: { $in: [studentId] },
+//   });
+
+//   if (!foundTest) {
+//     return res
+//       .status(404)
+//       .json({ message: "Test not found or you have not attended the test!!" });
+//   }
+
+//   // PAGINATION
+//   const page = +req.query.page || 1;
+//   const limit = 10;
+
+//   const startIndex = (page - 1) * limit;
+//   const endIndex = page * limit;
+
+//   const isFilter = req.query.filter;
+
+//   const populate = [
+//     {
+//       path: "answers.question",
+//       options: {
+//         populate: [
+//           { path: "subject", select: "subjectName" },
+//           { path: "chapter", select: "chapterName" },
+//         ],
+//       },
+//     },
+//   ];
+
+//   const result = await Answer.findOne({
+//     studentId: studentId,
+//     testId: foundTest.testId,
+//   })
+//     .populate(populate)
+//     .lean();
+
+//   let hasPrevPage = 0;
+//   let hasNextPage = 0;
+
+//   let totalDocs = 0;
+//   let totalPage = 0;
+
+//   if (result) {
+//     const query_params = req.query["query-params"];
+
+//     if (query_params) {
+//       const searchAndFilterQuery = [];
+//       const search = req.query.search || "";
+
+//       if (search) {
+//         searchAndFilterQuery.push({
+//           question: { $regex: search, $options: "i" },
+//         });
+//       } else {
+//         searchAndFilterQuery.push({ question: { $regex: "", $options: "i" } });
+//       }
+
+//       if (isFilter) {
+//         const examTypeId = req.query.exam_type || "";
+//         const subjectId = req.query.subject || "";
+//         const chapterId = req.query.chapter || "";
+//         const isCorrect = req.query.isCorrect || "";
+
+//         if (isCorrect === "yes") {
+//           const correctAns = result.answers.filter(
+//             (answer) => answer.isCorrect
+//           );
+//           result.answers = correctAns;
+//         } else if (isCorrect === "no") {
+//           const wrongAns = result.answers.filter((answer) => !answer.isCorrect);
+//           result.answers = wrongAns;
+//         }
+
+//         if (examTypeId) {
+//           searchAndFilterQuery.push({ examTypeId: examTypeId });
+//         }
+
+//         if (subjectId) {
+//           searchAndFilterQuery.push({ subjectId: subjectId });
+//         }
+
+//         if (chapterId) {
+//           searchAndFilterQuery.push({ chapterId: chapterId });
+//         }
+//       }
+
+//       const questionsDocs = await Question.find({
+//         questionId: { $in: foundTest.questionsId },
+//         $and: [...searchAndFilterQuery],
+//       });
+
+//       const includesArray = questionsDocs.map((item) => {
+//         return item.questionId;
+//       });
+
+//       result.answers = result.answers.filter((answer) =>
+//         includesArray.includes(answer.questionId)
+//       );
+//     }
+
+//     hasPrevPage = startIndex > 0 ? true : false;
+//     hasNextPage = endIndex < result.answers.length ? true : false;
+
+//     totalDocs = result.answers.length;
+//     totalPage = Math.ceil(result.answers.length / limit);
+
+//     result.answers = result.answers.slice(startIndex, endIndex);
+//   }
+
+//   const paginateOptions = {
+//     currentPage: page,
+//     totalPage,
+//     hasNextPage,
+//     hasPrevPage,
+//   };
+
+//   const prepareJson = {
+//     status: "success",
+//     totalDocs: totalDocs,
+//     docsInThisPage: result.answers.length,
+//     docs: result,
+//     paginateOptions,
+//   };
+
+//   res.json(prepareJson);
+// });
+
 export const getInsight = asyncHandler(async (req, res) => {
   const { testId } = req.params;
-  const { studentId } = req;
+  const studentId = req.studentId;
 
+  // 1. Find the test to ensure it exists and the student attended
   const foundTest = await Test.findOne({
     _id: testId,
     attendedStudentsId: { $in: [studentId] },
@@ -594,54 +729,109 @@ export const getInsight = asyncHandler(async (req, res) => {
       .json({ message: "Test not found or you have not attended the test!!" });
   }
 
-  // const populate = [{ path: "answers.question" }];
+  // 2. Set pagination parameters
+  const page = +req.query.page || 1;
+  const limit = 10;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
 
-  // const result = await Answer.findOne({
-  //   studentId: studentId,
-  //   testId: foundTest.testId,
-  // })
-  //   .populate(populate)
-  //   .lean();
+  // 3. Build the query for Answer documents
+  let query = {
+    studentId: studentId,
+    testId: foundTest.testId,
+  };
 
-  const pipeline = [
+  const populate = [
     {
-      $match: {
-        studentId: studentId,
-        testId: foundTest.testId, // Use the correct field here
+      path: "answers.question",
+      options: {
+        populate: [
+          { path: "subject", select: "subjectName" },
+          { path: "chapter", select: "chapterName" },
+        ],
       },
     },
-    // {
-    //   $lookup: {
-    //     from: "questions", // Replace with the actual collection name if different
-    //     localField: "answers.questionId", // Adjust based on your schema
-    //     foreignField: "questionId",
-    //     as: "answers.question",
-    //   },
-    // },
-    // {
-    //   $unwind: "$answers",
-    // },
-    // {
-    //   $lookup: {
-    //     from: "questions", // Replace with the actual collection name if different
-    //     localField: "answers.questionId", // Adjust based on your schema
-    //     foreignField: "questionId",
-    //     as: "answers.question",
-    //   },
-    // },
-    // {
-    //   $limit: 10, // Limit the number of answers to 10
-    // },
-    // {
-    //   $project: {
-    //     "answers.question._id": 1,
-    //     "answers.question.text": 1,
-    //     "answers.answer": 1, // Include other fields as needed
-    //   },
-    // },
   ];
 
-  const result = await Answer.aggregate(pipeline).exec();
+  // 4. Fetch answers for the student
+  const result = await Answer.findOne(query).populate(populate).lean();
 
-  res.json(result);
+  if (!result) {
+    return res.json({
+      status: "success",
+      totalDocs: 0,
+      docsInThisPage: 0,
+      docs: [],
+      paginateOptions: {
+        currentPage: page,
+        totalPage: 0,
+        hasNextPage: false,
+        hasPrevPage: false,
+      },
+    });
+  }
+
+  let filteredAnswers = result.answers;
+
+  // 5. Apply `isCorrect` filter if provided
+  const isCorrect = req.query.isCorrect || "";
+  if (isCorrect === "yes") {
+    filteredAnswers = filteredAnswers.filter((answer) => answer.isCorrect);
+  } else if (isCorrect === "no") {
+    filteredAnswers = filteredAnswers.filter((answer) => !answer.isCorrect);
+  }
+
+  // 6. Apply search and other filters
+  const search = req.query.search || "";
+  const examTypeId = req.query.exam_type || "";
+  const subjectId = req.query.subject || "";
+  const chapterId = req.query.chapter || "";
+
+  if (search || examTypeId || subjectId || chapterId) {
+    const questionIds = new Set(
+      filteredAnswers.map((answer) => answer.questionId)
+    );
+
+    // Fetch questions with the given filters
+    const questionsDocs = await Question.find({
+      questionId: { $in: Array.from(questionIds) },
+      ...(search ? { question: { $regex: search, $options: "i" } } : {}),
+      ...(examTypeId ? { examTypeId: examTypeId } : {}),
+      ...(subjectId ? { subjectId: subjectId } : {}),
+      ...(chapterId ? { chapterId: chapterId } : {}),
+    }).lean();
+
+    const validQuestionIds = new Set(
+      questionsDocs.map((doc) => doc.questionId)
+    );
+
+    filteredAnswers = filteredAnswers.filter((answer) =>
+      validQuestionIds.has(answer.questionId)
+    );
+  }
+
+  // Pagination
+  const totalDocs = filteredAnswers.length;
+  const hasPrevPage = startIndex > 0;
+  const hasNextPage = endIndex < totalDocs;
+  const totalPage = Math.ceil(totalDocs / limit);
+
+  // Slice results for pagination
+  const paginatedAnswers = filteredAnswers.slice(startIndex, endIndex);
+
+  // Prepare the response
+  const prepareJson = {
+    status: "success",
+    totalDocs: totalDocs,
+    docsInThisPage: paginatedAnswers.length,
+    docs: { ...result, answers: paginatedAnswers },
+    paginateOptions: {
+      currentPage: page,
+      totalPage,
+      hasNextPage,
+      hasPrevPage,
+    },
+  };
+
+  res.json(prepareJson);
 });
