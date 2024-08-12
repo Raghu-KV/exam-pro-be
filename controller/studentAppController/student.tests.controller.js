@@ -581,221 +581,67 @@ export const postAnswer = asyncHandler(async (req, res) => {
 
 export const getInsight = asyncHandler(async (req, res) => {
   const { testId } = req.params;
-  const examTypeId = req.examTypeId;
-  const studentId = req.studentId;
+  const { studentId } = req;
 
-  const foundTest = await Test.findById(testId).select("testId questionsId");
+  const foundTest = await Test.findOne({
+    _id: testId,
+    attendedStudentsId: { $in: [studentId] },
+  });
 
-  if (!foundTest)
-    return res.status(404).res.json({ message: "Test not found" });
-
-  const foundAsnwersForTest = await Answer.findOne({
-    testId: foundTest.testId,
-    studentId: studentId,
-  }).select("-answers");
-
-  if (!foundAsnwersForTest)
-    return res.status(404).res.json({ message: "Answer not found" });
-
-  // FOR PAGINATION QUESTIONS
-
-  const page = +req.query.page || 1;
-  const limit = 10;
-
-  const searchAndFilterQuery = [];
-
-  const search = req.query.search || "";
-
-  const isFilter = req.query.filter;
-
-  if (search) {
-    searchAndFilterQuery.push({
-      question: { $regex: search, $options: "i" },
-    });
-  } else {
-    searchAndFilterQuery.push({ question: { $regex: "", $options: "i" } });
+  if (!foundTest) {
+    return res
+      .status(404)
+      .json({ message: "Test not found or you have not attended the test!!" });
   }
 
-  if (isFilter) {
-    const examTypeId = req.query.exam_type || "";
-    const subjectId = req.query.subject || "";
-    const chapterId = req.query.chapter || "";
-    const startDate = req.query.start_date || "";
-    const endDate = req.query.end_date || "";
-    const publishStatus = req.query.publish_status || "";
+  // const populate = [{ path: "answers.question" }];
 
-    if (publishStatus) {
-      if (publishStatus === "published") {
-        searchAndFilterQuery.push({ isPublished: true });
-      } else if (publishStatus === "notPublished") {
-        searchAndFilterQuery.push({ isPublished: false });
-      }
-    }
-
-    if (examTypeId) {
-      searchAndFilterQuery.push({ examTypeId: examTypeId });
-    }
-
-    if (subjectId) {
-      searchAndFilterQuery.push({ subjectId: subjectId });
-    }
-
-    if (chapterId) {
-      searchAndFilterQuery.push({ chapterId: chapterId });
-    }
-    if (startDate && endDate) {
-      // const a = endDate;
-      // const date = +a.split("-")[2] + 1;
-      // const monthYear = a.split("-").splice(0, 2);
-      // monthYear.push(date);
-      // const addedOneDay = monthYear.join("-");
-
-      function addDays(date, days) {
-        const newDate = new Date(date);
-        newDate.setDate(date.getDate() + days);
-        return newDate;
-      }
-      const a = new Date(endDate);
-      const addedOneDay = addDays(a, 1);
-
-      searchAndFilterQuery.push({
-        createdAt: { $gte: new Date(startDate), $lt: new Date(addedOneDay) },
-      });
-    }
-  }
-
-  const totalFilteredDoc = await Question.find({
-    questionId: { $in: foundTest.questionsId },
-    $and: [
-      ...searchAndFilterQuery,
-      // { examType: { $regex: search, $options: "i" } },
-      //   { examTypeId: { $regex: "", $options: "i" } },
-      //   { createdAt: { $gte: new Date("2024-07-14"), $lte: new Date() } },
-    ],
-  }).countDocuments();
-
-  const totalDoc = await Question.find({
-    questionId: { $in: foundTest.questionsId },
-  }).countDocuments();
-
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-
-  console.log("startIndex :", startIndex, "endIndex :", endIndex);
-
-  const hasPrevPage = startIndex > 0 ? true : false;
-  const hasNextPage = endIndex < totalFilteredDoc ? true : false;
-
-  const populate = [
-    {
-      path: "answer",
-      options: {
-        withDeleted: true,
-        match: { answerId: foundAsnwersForTest.answerId },
-        select: { answers: 1 },
-      },
-    },
-    //   { path: "examType", options: { select: { examType: 1 } } },
-    // { path: "subject", options: { select: { subjectName: 1 } } },
-    // { path: "chapter", options: { select: { chapterName: 1 } } },
-  ];
-
-  console.log(foundAsnwersForTest.answerId, "KKKKK");
-
-  // const questionData = await Question.find({
-  //   questionId: { $in: foundTest.questionsId },
-  //   $and: [
-  //     ...searchAndFilterQuery,
-  //     //   { examType: { $regex: search, $options: "i" } },
-  //     //   { examTypeId: { $regex: "", $options: "i" } },
-  //     //   { createdAt: { $gte: new Date("2024-07-14"), $lte: new Date() } },
-  //   ],
+  // const result = await Answer.findOne({
+  //   studentId: studentId,
+  //   testId: foundTest.testId,
   // })
-  //   .skip(startIndex)
-  //   .limit(limit)
   //   .populate(populate)
-  //   .select("-attendedStudentsId -questionsId")
   //   .lean();
 
-  const questionData = await Question.aggregate([
+  const pipeline = [
     {
       $match: {
-        questionId: { $in: foundTest.questionsId },
-        ...searchAndFilterQuery.reduce(
-          (acc, query) => ({ ...acc, ...query }),
-          {}
-        ),
-      },
-    },
-    {
-      $lookup: {
-        from: "answers",
-        localField: "answer",
-        foreignField: "_id",
-        as: "answer",
-      },
-    },
-    {
-      $unwind: {
-        path: "$answer",
-        preserveNullAndEmptyArrays: true,
+        studentId: studentId,
+        testId: foundTest.testId, // Use the correct field here
       },
     },
     // {
-    //   $match: {
-    //     "answer.answerId": foundAsnwersForTest.answerId,
+    //   $lookup: {
+    //     from: "questions", // Replace with the actual collection name if different
+    //     localField: "answers.questionId", // Adjust based on your schema
+    //     foreignField: "questionId",
+    //     as: "answers.question",
     //   },
     // },
-    {
-      $skip: startIndex,
-    },
-    {
-      $limit: limit,
-    },
-    {
-      $project: {
-        attendedStudentsId: 0,
-        questionsId: 0,
-      },
-    },
-  ]);
+    // {
+    //   $unwind: "$answers",
+    // },
+    // {
+    //   $lookup: {
+    //     from: "questions", // Replace with the actual collection name if different
+    //     localField: "answers.questionId", // Adjust based on your schema
+    //     foreignField: "questionId",
+    //     as: "answers.question",
+    //   },
+    // },
+    // {
+    //   $limit: 10, // Limit the number of answers to 10
+    // },
+    // {
+    //   $project: {
+    //     "answers.question._id": 1,
+    //     "answers.question.text": 1,
+    //     "answers.answer": 1, // Include other fields as needed
+    //   },
+    // },
+  ];
 
-  console.log("Filtered question data:", questionData);
+  const result = await Answer.aggregate(pipeline).exec();
 
-  // Step 1: Preprocess answers into a lookup map
-  const answerLookup = new Map();
-  questionData.forEach((question) => {
-    if (question.answer?.answers) {
-      question.answer.answers.forEach((answer) => {
-        answerLookup.set(answer.questionId, answer);
-      });
-    }
-  });
-
-  // Step 2: Map over questions and use the lookup map
-  const filteredQuestionData = questionData.map((question) => {
-    const specificAnswer = answerLookup.get(question.questionId) || null;
-    question.answer = specificAnswer;
-    return question;
-  });
-
-  const totalPage = Math.ceil(totalFilteredDoc / limit);
-
-  const paginateOptions = {
-    currentPage: page,
-    totalPage,
-    hasNextPage,
-    hasPrevPage,
-  };
-
-  const prepareJson = {
-    status: "success",
-    insight: foundAsnwersForTest,
-    totalDocs: totalDoc,
-    docsInThisPage: questionData.length,
-    docs: questionData,
-    paginateOptions,
-  };
-
-  res.json(prepareJson);
+  res.json(result);
 });

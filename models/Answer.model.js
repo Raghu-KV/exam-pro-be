@@ -59,10 +59,11 @@ const answerSchema = mongoose.Schema({
   },
 });
 
-answerSchema.virtual("question", {
+answerSchema.virtual("answers.question", {
   ref: "Question",
   localField: "answers.questionId",
   foreignField: "questionId",
+  justOne: true,
 });
 
 const Answer = mongoose.model("Answer", answerSchema);
