@@ -84,6 +84,7 @@ export const studentRefresh = async (req, res) => {
             studentName: foundUser.studentName,
             rollNo: foundUser.rollNo,
             examTypeId: foundUser.enrolledExamTypeId,
+            studentId: foundUser.studentId,
           },
         },
         process.env.STUDENT_ACCESS_TOKEN_SECRET,

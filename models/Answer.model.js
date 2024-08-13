@@ -66,6 +66,13 @@ answerSchema.virtual("answers.question", {
   justOne: true,
 });
 
+answerSchema.virtual("testInfo", {
+  ref: "Test",
+  localField: "testId",
+  foreignField: "testId",
+  justOne: true,
+});
+
 const Answer = mongoose.model("Answer", answerSchema);
 
 export default Answer;

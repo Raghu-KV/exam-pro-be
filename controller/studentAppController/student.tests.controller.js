@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Test from "../../models/Test.model.js";
 import Answer from "./../../models/Answer.model.js";
 import Question from "./../../models/Question.model.js";
+
 // @desc get all upcoming tests
 // @route GET /student/tests/upcomingTests
 // @access private
@@ -751,6 +752,7 @@ export const getInsight = asyncHandler(async (req, res) => {
         ],
       },
     },
+    { path: "testInfo", select: "testName" },
   ];
 
   // 4. Fetch answers for the student
