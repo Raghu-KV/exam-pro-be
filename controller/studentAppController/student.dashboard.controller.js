@@ -23,8 +23,13 @@ export const studentDashboard = asyncHandler(async (req, res) => {
 
   const pipeline = [
     {
+      $match: {
+        studentId: studentId, // Replace <current_student_id> with the actual student ID
+      },
+    },
+    {
       $group: {
-        _id: studentId,
+        _id: "$studentId",
         count: { $count: {} },
         avgAccuracyPercent: { $avg: "$accuracyPercent" },
         avgMistakePercent: { $avg: "$mistakePercent" },
