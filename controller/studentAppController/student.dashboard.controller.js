@@ -35,7 +35,22 @@ export const studentDashboard = asyncHandler(async (req, res) => {
 
   const insightData = await Answer.aggregate(pipeline);
 
-  console.log(insightData);
+  const latestAnswersData = await Answer.find({
+    studentId: studentId,
+  })
+    .sort({ createdAt: -1 })
+    .select("accuracyPercent mistakePercent unattendedPercentage testId")
+    .populate({ path: "testInfo", select: "testName" })
+    .limit(5)
+    .lean();
 
-  res.json({ message: "check console" });
+  const prepareJson = {
+    studentData,
+    attendedTestsNo: attendedTestsNo,
+    notAttendedTestNo: notAttendedTestNo,
+    insightData,
+    latestAnswersData,
+  };
+
+  res.json(prepareJson);
 });

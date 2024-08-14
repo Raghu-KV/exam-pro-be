@@ -14,50 +14,53 @@ const studentAnswerScheme = mongoose.Schema({
   },
 });
 
-const answerSchema = mongoose.Schema({
-  answerId: {
-    type: String,
-    default: () => randomUUID(),
-    immutable: true,
+const answerSchema = mongoose.Schema(
+  {
+    answerId: {
+      type: String,
+      default: () => randomUUID(),
+      immutable: true,
+    },
+    studentId: {
+      type: String,
+      required: true,
+    },
+    testId: {
+      type: String,
+      required: true,
+    },
+    answers: {
+      type: [studentAnswerScheme],
+      required: true,
+    },
+    totalQuestions: {
+      type: Number,
+      required: true,
+    },
+    totalCorrectAnswers: {
+      type: Number,
+    },
+    totalWrongAnswers: {
+      type: Number,
+    },
+    totalAttendedQuestions: {
+      type: Number,
+    },
+    totalNotAttendedQuestions: {
+      type: Number,
+    },
+    accuracyPercent: {
+      type: Number,
+    },
+    mistakePercent: {
+      type: Number,
+    },
+    unattendedPercentage: {
+      type: Number,
+    },
   },
-  studentId: {
-    type: String,
-    required: true,
-  },
-  testId: {
-    type: String,
-    required: true,
-  },
-  answers: {
-    type: [studentAnswerScheme],
-    required: true,
-  },
-  totalQuestions: {
-    type: Number,
-    required: true,
-  },
-  totalCorrectAnswers: {
-    type: Number,
-  },
-  totalWrongAnswers: {
-    type: Number,
-  },
-  totalAttendedQuestions: {
-    type: Number,
-  },
-  totalNotAttendedQuestions: {
-    type: Number,
-  },
-  accuracyPercent: {
-    type: Number,
-  },
-  mistakePercent: {
-    type: Number,
-  },
-  unattendedPercentage: {
-    type: Number,
-  },
-});
+  { timestamps: true }
+);
 
 answerSchema.virtual("answers.question", {
   ref: "Question",

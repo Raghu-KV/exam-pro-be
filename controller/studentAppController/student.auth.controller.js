@@ -96,6 +96,43 @@ export const studentRefresh = async (req, res) => {
   );
 };
 
+// @desc change student password
+// @route POST /student/auth/changePassword
+// @access private
+export const changePassword = asyncHandler(async (req, res) => {
+  const studentId = req.studentId;
+
+  const { oldPassword, newPassword } = req.body;
+
+  if (!studentId) {
+    return res
+      .status(404)
+      .json({ message: "Could not change password, StudentId not found!!" });
+  }
+
+  const foundStudent = await Student.findOne({ studentId }).select("+password");
+
+  if (!foundStudent) {
+    return res.status(404).json({ message: "Student not found!!" });
+  }
+
+  const match = bcrypt.compareSync(oldPassword, foundStudent.password);
+
+  if (!match) {
+    return res.status(404).json({
+      message: "Could not change password, Entered old password is incorrect!!",
+    });
+  }
+
+  const hash = bcrypt.hashSync(newPassword, 10);
+
+  foundStudent.password = hash;
+  foundStudent.rawPassword = newPassword;
+  await foundStudent.save();
+
+  res.json({ message: "Password changed successfully" });
+});
+
 // @desc logout student
 // @route POST /student/auth/logout
 // @access public - just to clear cookie if exists
