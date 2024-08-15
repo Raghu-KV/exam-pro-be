@@ -6,6 +6,7 @@ export const postStudentSchema = Joi.object({
   rollNo: Joi.string().required(),
   phoneNo: Joi.number().required(),
   enrolledExamTypeId: Joi.string().required(),
+  groupId: Joi.string().required(),
 });
 
 export const updateStudentSchema = Joi.object({
@@ -16,6 +17,7 @@ export const updateStudentSchema = Joi.object({
   rollNo: Joi.string().required(),
   phoneNo: Joi.number().required(),
   enrolledExamTypeId: Joi.string().required(),
+  groupId: Joi.string().required(),
 });
 
 export const deleteStudentSchema = Joi.object({

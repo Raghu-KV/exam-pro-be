@@ -31,6 +31,10 @@ const studentSchema = mongoose.Schema(
       type: String, // Assuming enrolledExamType stores examTypeId
       required: true,
     },
+    groupId: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       select: false,
@@ -49,6 +53,13 @@ studentSchema.virtual("enrolledExamType", {
   ref: "ExamType",
   localField: "enrolledExamTypeId",
   foreignField: "examTypeId",
+  justOne: true, // Assuming each student is enrolled in only one exam type
+});
+
+studentSchema.virtual("group", {
+  ref: "Group",
+  localField: "groupId",
+  foreignField: "groupId",
   justOne: true, // Assuming each student is enrolled in only one exam type
 });
 

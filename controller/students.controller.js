@@ -7,7 +7,8 @@ import Student from "../models/Student.model.js";
 // @route POST /students
 // @access private
 export const addStudent = asyncHandler(async (req, res) => {
-  const { rollNo, studentName, phoneNo, enrolledExamTypeId } = req.body;
+  const { rollNo, studentName, phoneNo, enrolledExamTypeId, groupId } =
+    req.body;
 
   const autoPass = process.env.AUTO_PASS;
 
@@ -18,6 +19,7 @@ export const addStudent = asyncHandler(async (req, res) => {
     studentName,
     phoneNo,
     enrolledExamTypeId,
+    groupId,
     password: hashedPass,
     rawPassword: autoPass,
   });
@@ -29,7 +31,8 @@ export const addStudent = asyncHandler(async (req, res) => {
 // @route PATCH /students/:id
 // @access private
 export const updateStudent = asyncHandler(async (req, res) => {
-  const { rollNo, studentName, phoneNo, enrolledExamTypeId } = req.body;
+  const { rollNo, studentName, phoneNo, enrolledExamTypeId, groupId } =
+    req.body;
   const { id } = req.params;
 
   const student = await Student.findById(id).exec();
@@ -40,6 +43,7 @@ export const updateStudent = asyncHandler(async (req, res) => {
   student.studentName = studentName;
   student.phoneNo = phoneNo;
   student.enrolledExamTypeId = enrolledExamTypeId;
+  student.groupId = groupId;
 
   const saveStudent = await student.save();
 
@@ -70,6 +74,7 @@ export const getSingleStudent = asyncHandler(async (req, res) => {
   const populate = [
     // { path: "enrolledExamType", options: { withDeleted: true } },
     { path: "enrolledExamType" },
+    { path: "group" },
   ];
   const student = await Student.findById(id).populate(populate).lean();
 
@@ -172,6 +177,7 @@ export const getAllStudents = asyncHandler(async (req, res) => {
   const populate = [
     // { path: "enrolledExamType", options: { withDeleted: true } },
     { path: "enrolledExamType", options: { select: { examType: 1 } } },
+    { path: "group", options: { select: { groupName: 1 } } },
   ];
 
   const examTypeData = await Student.find({
