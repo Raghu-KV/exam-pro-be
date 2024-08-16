@@ -32,6 +32,10 @@ const testSchema = mongoose.Schema(
       type: [String],
       default: [],
     },
+    groupsId: {
+      type: [String],
+      default: [],
+    },
     attendedStudentsId: {
       type: [String],
       default: [],
@@ -58,6 +62,12 @@ testSchema.virtual("examType", {
   localField: "examTypeId",
   foreignField: "examTypeId",
   justOne: true,
+});
+
+testSchema.virtual("group", {
+  ref: "Group",
+  localField: "groupsId",
+  foreignField: "groupId",
 });
 
 const Test = mongoose.model("Test", testSchema);

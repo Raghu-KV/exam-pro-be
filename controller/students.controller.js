@@ -132,6 +132,7 @@ export const getAllStudents = asyncHandler(async (req, res) => {
     const phoneNo = +req.query.phone_no || "";
     const startDate = req.query.start_date || "";
     const endDate = req.query.end_date || "";
+    const groupId = req.query.group || "";
     if (examTypeId) {
       searchAndFilterQuery.push({ enrolledExamTypeId: examTypeId });
     }
@@ -140,6 +141,9 @@ export const getAllStudents = asyncHandler(async (req, res) => {
     }
     if (phoneNo) {
       searchAndFilterQuery.push({ phoneNo: { $regex: phoneNo } });
+    }
+    if (groupId) {
+      searchAndFilterQuery.push({ groupId: groupId });
     }
 
     if (startDate && endDate) {

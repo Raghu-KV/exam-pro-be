@@ -37,8 +37,8 @@ connectToDb();
 //MIDDLEWARES
 app.use(cookieParser());
 app.use(logger);
-// app.use(cors(corsOptions));
-app.use(cors());
+app.use(cors(corsOptions));
+// app.use(cors());
 app.use(express.json());
 
 // ADMIN ROUTES

@@ -12,6 +12,9 @@ export const getAllUpcomingTestsForStudent = asyncHandler(async (req, res) => {
 
   const examTypeId = req.examTypeId;
   const studentId = req.studentId;
+  const groupId = req.groupId;
+
+  console.log(groupId, studentId);
 
   const searchAndFilterQuery = [];
 
@@ -79,6 +82,7 @@ export const getAllUpcomingTestsForStudent = asyncHandler(async (req, res) => {
     examTypeId: examTypeId,
     isPublished: true,
     attendedStudentsId: { $nin: [studentId] },
+    groupsId: { $in: [groupId] },
     $and: [
       ...searchAndFilterQuery,
       // { examType: { $regex: search, $options: "i" } },
@@ -91,6 +95,7 @@ export const getAllUpcomingTestsForStudent = asyncHandler(async (req, res) => {
     examTypeId: examTypeId,
     isPublished: true,
     attendedStudentsId: { $nin: [studentId] },
+    groupsId: { $in: [groupId] },
   }).countDocuments();
 
   const startIndex = (page - 1) * limit;
@@ -112,6 +117,7 @@ export const getAllUpcomingTestsForStudent = asyncHandler(async (req, res) => {
     examTypeId: examTypeId,
     isPublished: true,
     attendedStudentsId: { $nin: [studentId] },
+    groupsId: { $in: [groupId] },
     $and: [
       ...searchAndFilterQuery,
       //   { examType: { $regex: search, $options: "i" } },
@@ -155,6 +161,7 @@ export const getAllCompletedTestsForStudent = asyncHandler(async (req, res) => {
 
   const examTypeId = req.examTypeId;
   const studentId = req.studentId;
+  const groupId = req.groupId;
 
   const searchAndFilterQuery = [];
 
@@ -222,6 +229,7 @@ export const getAllCompletedTestsForStudent = asyncHandler(async (req, res) => {
     examTypeId: examTypeId,
     isPublished: true,
     attendedStudentsId: { $in: [studentId] },
+    groupsId: { $in: [groupId] },
     $and: [
       ...searchAndFilterQuery,
       // { examType: { $regex: search, $options: "i" } },
@@ -234,6 +242,7 @@ export const getAllCompletedTestsForStudent = asyncHandler(async (req, res) => {
     examTypeId: examTypeId,
     isPublished: true,
     attendedStudentsId: { $in: [studentId] },
+    groupsId: { $in: [groupId] },
   }).countDocuments();
 
   const startIndex = (page - 1) * limit;
@@ -255,6 +264,7 @@ export const getAllCompletedTestsForStudent = asyncHandler(async (req, res) => {
     examTypeId: examTypeId,
     isPublished: true,
     attendedStudentsId: { $in: [studentId] },
+    groupsId: { $in: [groupId] },
     $and: [
       ...searchAndFilterQuery,
       //   { examType: { $regex: search, $options: "i" } },
@@ -289,13 +299,14 @@ export const getAllCompletedTestsForStudent = asyncHandler(async (req, res) => {
   res.json(prepareJson);
 });
 
-// @desc get singel test with all question with no pagination
+// @desc get single test with all question with no pagination
 // @route GET /student/tests/upcomingTests/:id
 // @access private
 export const getSingleTest = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const studentId = req.studentId;
+  const groupId = req.groupId;
 
   const populate = [{ path: "questions", select: "question options" }];
 
@@ -316,7 +327,7 @@ export const getSingleTest = asyncHandler(async (req, res) => {
   if (isAttended) {
     return res
       .status(404)
-      .json({ message: "You have already attended this test!!" });
+      .json({ message: "You have already attended this test!! or This yest" });
   }
 
   res.json(test);
@@ -451,11 +462,11 @@ export const getSingleTest = asyncHandler(async (req, res) => {
 export const postAnswer = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { answers: submittedAnsPayload } = req.body;
-  const { studentId } = req;
+  const { studentId, groupId } = req;
 
   // Fetch the test by ID
   const foundTest = await Test.findById(id)
-    .select("questionsId attendedStudentsId testId")
+    .select("questionsId attendedStudentsId testId groupsId")
     .lean();
   if (!foundTest) return res.status(404).json({ message: "Test not found" });
 
@@ -464,6 +475,11 @@ export const postAnswer = asyncHandler(async (req, res) => {
     return res
       .status(400)
       .json({ message: "You have already attended this test" });
+  }
+
+  // Check if this test is for the spefic group
+  if (!foundTest.groupsId.includes(groupId)) {
+    return res.status(400).json({ message: "This test is not for your group" });
   }
 
   // Function to remove duplicates from the answers payload
@@ -717,17 +733,20 @@ export const postAnswer = asyncHandler(async (req, res) => {
 export const getInsight = asyncHandler(async (req, res) => {
   const { testId } = req.params;
   const studentId = req.studentId;
+  const groupId = req.groupId;
 
   // 1. Find the test to ensure it exists and the student attended
   const foundTest = await Test.findOne({
     _id: testId,
     attendedStudentsId: { $in: [studentId] },
+    groupsId: { $in: [groupId] },
   });
 
   if (!foundTest) {
-    return res
-      .status(404)
-      .json({ message: "Test not found or you have not attended the test!!" });
+    return res.status(404).json({
+      message:
+        "Test not found or you have not attended the test or the test is nor for your group!!",
+    });
   }
 
   // 2. Set pagination parameters

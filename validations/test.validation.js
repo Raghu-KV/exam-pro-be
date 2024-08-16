@@ -3,6 +3,7 @@ import Joi from "joi";
 export const postTestSchema = Joi.object({
   testName: Joi.string().required(),
   examTypeId: Joi.string().required(),
+  groupsId: Joi.array().items(Joi.string()).min(1).max(50).required(),
 });
 
 export const deleteTest = Joi.object({
@@ -17,6 +18,7 @@ export const updateTestSchema = Joi.object({
   // on body
   testName: Joi.string().required(),
   examTypeId: Joi.string().required(),
+  groupsId: Joi.array().items(Joi.string()).min(1).max(50).required(),
 });
 
 export const updateTestTimingSchema = Joi.object({

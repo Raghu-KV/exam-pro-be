@@ -20,6 +20,7 @@ export const verifyJwt = (req, res, next) => {
       req.rollNo = decoded.userInfo.rollNo;
       req.examTypeId = decoded.userInfo.examTypeId;
       req.studentId = decoded.userInfo.studentId;
+      req.groupId = decoded.userInfo.groupId;
       next();
     }
   );

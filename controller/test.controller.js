@@ -7,9 +7,9 @@ import Question from "./../models/Question.model.js";
 // @route POST /tests
 // @access private
 export const addTest = asyncHandler(async (req, res) => {
-  const { testName, examTypeId } = req.body;
+  const { testName, examTypeId, groupsId } = req.body;
 
-  const testData = await Test.create({ testName, examTypeId });
+  const testData = await Test.create({ testName, examTypeId, groupsId });
 
   res.json(testData);
 });
@@ -22,13 +22,14 @@ export const getSingleTest = asyncHandler(async (req, res) => {
 
   const populate = [
     // { path: "enrolledExamType", options: { withDeleted: true } },
-    // { path: "questions" },
+    { path: "group" },
   ];
 
   const test = await Test.findById(id).populate(populate).lean();
 
   const totalStudents = await Student.find({
     enrolledExamTypeId: test.examTypeId,
+    groupId: { $in: [...test.groupsId] },
   }).countDocuments();
 
   if (!test) return res.status(404).json({ message: "No test found" });
@@ -65,7 +66,7 @@ export const deleteTest = asyncHandler(async (req, res) => {
 // @access privatete
 export const updateTest = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { testName, examTypeId } = req.body;
+  const { testName, examTypeId, groupsId } = req.body;
 
   const testData = await Test.findById(id);
 
@@ -79,6 +80,7 @@ export const updateTest = asyncHandler(async (req, res) => {
 
   testData.testName = testName;
   testData.examTypeId = examTypeId;
+  testData.groupsId = groupsId;
 
   const save = testData.save();
 
@@ -91,7 +93,9 @@ export const updateTest = asyncHandler(async (req, res) => {
 export const prefillTest = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const testData = await Test.findById(id).select("testName examTypeId");
+  const testData = await Test.findById(id).select(
+    "testName examTypeId groupsId"
+  );
   if (!testData) return res.status(404).json({ message: "Test not found!" });
 
   res.json(testData);

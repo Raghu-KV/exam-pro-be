@@ -9,15 +9,24 @@ import Student from "../../models/Student.model.js";
 export const studentDashboard = asyncHandler(async (req, res) => {
   const studentId = req.studentId;
   const examTypeId = req.examTypeId;
+  const groupId = req.groupId;
 
-  const studentData = await Student.findOne({ studentId });
+  const studentData = await Student.findOne({ studentId })
+    .populate({
+      path: "group",
+    })
+    .lean();
 
   const attendedTestsNo = await Test.find({
     attendedStudentsId: { $in: [studentId] },
+    isPublished: true,
+    groupsId: { $in: [groupId] },
   }).countDocuments();
 
   const notAttendedTestNo = await Test.find({
     examTypeId: examTypeId,
+    isPublished: true,
+    groupsId: { $in: [groupId] },
     attendedStudentsId: { $nin: [studentId] },
   }).countDocuments();
 
