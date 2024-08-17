@@ -233,11 +233,19 @@ export const getAllSubjects = asyncHandler(async (req, res) => {
     }
 
     if (startDate && endDate) {
-      const a = endDate;
-      const date = +a.split("-")[2] + 1;
-      const monthYear = a.split("-").splice(0, 2);
-      monthYear.push(date);
-      const addedOneDay = monthYear.join("-");
+      // const a = endDate;
+      // const date = +a.split("-")[2] + 1;
+      // const monthYear = a.split("-").splice(0, 2);
+      // monthYear.push(date);
+      // const addedOneDay = monthYear.join("-");
+
+      function addDays(date, days) {
+        const newDate = new Date(date);
+        newDate.setDate(date.getDate() + days);
+        return newDate;
+      }
+      const a = new Date(endDate);
+      const addedOneDay = addDays(a, 1);
 
       searchAndFilterQuery.push({
         createdAt: { $gte: new Date(startDate), $lt: new Date(addedOneDay) },
