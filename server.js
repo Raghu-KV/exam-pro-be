@@ -28,6 +28,7 @@ import { router as studentAuthRouter } from "./routes/studentAppRoutes/student.a
 import { router as studentTestRouter } from "./routes/studentAppRoutes/student.tests.routes.js";
 import { router as studentDropDownRouter } from "./routes/studentAppRoutes/student.dropDown.routes.js";
 import { router as studentDashboardRouter } from "./routes/studentAppRoutes/student.dashboard.routes.js";
+import { router as studentInfoRouter } from "./routes/studentAppRoutes/student.infoCenter.routes.js";
 
 dotenv.config();
 const app = express();
@@ -60,6 +61,7 @@ app.use("/student/auth", studentAuthRouter);
 app.use("/student/tests", studentTestRouter);
 app.use("/student/dropDown", studentDropDownRouter);
 app.use("/student/dashboard", studentDashboardRouter);
+app.use("/student/infoCenter", studentInfoRouter);
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "404 Not found" });
