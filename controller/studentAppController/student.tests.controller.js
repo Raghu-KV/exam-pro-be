@@ -129,7 +129,7 @@ export const getAllUpcomingTestsForStudent = asyncHandler(async (req, res) => {
     .limit(limit)
     .populate(populate)
     .sort({ publishedAt: -1 })
-    .select("-attendedStudentsId -questionsId")
+    .select("-attendedStudentsId -questionsId  -groupsId")
     .lean();
 
   const totalPage = Math.ceil(totalFilteredDoc / limit);
@@ -276,7 +276,7 @@ export const getAllCompletedTestsForStudent = asyncHandler(async (req, res) => {
     .limit(limit)
     .populate(populate)
     .sort({ publishedAt: -1 })
-    .select("-attendedStudentsId -questionsId")
+    .select("-attendedStudentsId -questionsId  -groupsId")
     .lean();
 
   const totalPage = Math.ceil(totalFilteredDoc / limit);
@@ -466,7 +466,7 @@ export const postAnswer = asyncHandler(async (req, res) => {
 
   // Fetch the test by ID
   const foundTest = await Test.findById(id)
-    .select("questionsId attendedStudentsId testId groupsId")
+    .select("questionsId attendedStudentsId testId groupsId examTypeId")
     .lean();
   if (!foundTest) return res.status(404).json({ message: "Test not found" });
 
@@ -566,6 +566,7 @@ export const postAnswer = asyncHandler(async (req, res) => {
   const prepareObj = {
     studentId,
     testId: foundTest.testId,
+    examTypeId: foundTest.examTypeId,
     answers: [...detailedSubmittedAns, ...unansweredQuestions],
     totalQuestions: foundTest.questionsId.length,
     totalCorrectAnswers: correctCount,

@@ -10,6 +10,10 @@ import {
   deleteStudent,
   getAllStudents,
   getSingleStudent,
+  getStudentCompletedTestInsight,
+  getStudentCompletedTests,
+  getStudentDeatilView,
+  getStudentIncompleteTests,
   resetPassword,
   updateStudent,
 } from "../controller/students.controller.js";
@@ -26,8 +30,24 @@ router
   .post(joiValidation(postStudentSchema), addStudent);
 
 router
-  .route("/reset-password/:id")
+  .route("/resetPassword/:id")
   .patch(joiValidation(deleteStudentSchema), resetPassword);
+
+router
+  .route("/view/:id")
+  .get(joiValidation(deleteStudentSchema), getStudentDeatilView);
+
+router
+  .route("/incompleteTests/:id")
+  .get(joiValidation(deleteStudentSchema), getStudentIncompleteTests);
+
+router
+  .route("/completedTests/:id")
+  .get(joiValidation(deleteStudentSchema), getStudentCompletedTests);
+
+router
+  .route("/completedTests/:id/insight/:testId")
+  .get(getStudentCompletedTestInsight);
 
 router
   .route("/:id")

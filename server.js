@@ -22,6 +22,7 @@ import { router as userRouter } from "./routes/user.routes.js";
 import { router as authRouter } from "./routes/auth.routes.js";
 import { router as groupRouter } from "./routes/group.routes.js";
 import { router as infoCenterRouter } from "./routes/info-ceter.routes.js";
+import { router as dashboardRouter } from "./routes/dashboard.routes.js";
 
 // STUDENT ROUTES
 import { router as studentAuthRouter } from "./routes/studentAppRoutes/student.auth.routes.js";
@@ -45,6 +46,7 @@ app.use(express.json());
 
 // ADMIN ROUTES
 app.use("/", rootRouter);
+app.use("/dashboard", dashboardRouter);
 app.use("/exam-type", examTypeRouter);
 app.use("/groups", groupRouter);
 app.use("/infos", infoCenterRouter);

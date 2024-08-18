@@ -29,6 +29,10 @@ const answerSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    examTypeId: {
+      type: String,
+      required: true,
+    },
     answers: {
       type: [studentAnswerScheme],
       required: true,
