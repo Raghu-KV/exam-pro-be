@@ -9,6 +9,7 @@ import { logger, logEvents } from "./middleware/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { connectToDb } from "./config/dbConnection.js";
 import { corsOptions } from "./config/corsOptions.js";
+import { paymentVerify } from "./middleware/paymentVerify.js";
 
 // ROUTES
 import { router as rootRouter } from "./routes/root.routes.js";
@@ -23,6 +24,7 @@ import { router as authRouter } from "./routes/auth.routes.js";
 import { router as groupRouter } from "./routes/group.routes.js";
 import { router as infoCenterRouter } from "./routes/info-ceter.routes.js";
 import { router as dashboardRouter } from "./routes/dashboard.routes.js";
+import { router as paymentsRoutes } from "./routes/payment.routes.js";
 
 // STUDENT ROUTES
 import { router as studentAuthRouter } from "./routes/studentAppRoutes/student.auth.routes.js";
@@ -44,6 +46,9 @@ app.use(cors(corsOptions));
 // app.use(cors());
 app.use(express.json());
 
+// FOR PAYMENT CHECK
+app.use(paymentVerify);
+
 // ADMIN ROUTES
 app.use("/", rootRouter);
 app.use("/dashboard", dashboardRouter);
@@ -57,6 +62,7 @@ app.use("/questions", questionRouter);
 app.use("/tests", testRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
+app.use("/payment", paymentsRoutes);
 
 // STUDENT ROUTES
 app.use("/student/auth", studentAuthRouter);
