@@ -19,6 +19,8 @@ import {
   changePublish,
   getQuestionsOnTestWithNoPagination,
   updateQuestionsForTest,
+  getCompletedStudents,
+  getIncompleteStudents,
 } from "../controller/test.controller.js";
 
 import { verifyJwt } from "./../middleware/verifyJwt.js";
@@ -55,6 +57,14 @@ router
 router
   .route("/:id/getQuestions")
   .get(joiValidation(deleteTestScheme), getQuestionsOnTest);
+
+router
+  .route("/:id/getCompletedStudents")
+  .get(joiValidation(deleteTestScheme), getCompletedStudents);
+
+router
+  .route("/:id/getIncompleteStudents")
+  .get(joiValidation(deleteTestScheme), getIncompleteStudents);
 
 // all the default routes for test
 

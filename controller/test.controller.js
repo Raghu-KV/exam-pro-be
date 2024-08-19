@@ -29,8 +29,10 @@ export const getSingleTest = asyncHandler(async (req, res) => {
 
   const totalStudents = await Student.find({
     enrolledExamTypeId: test.examTypeId,
-    groupId: { $in: [...test.groupsId] },
+    groupId: { $in: test.groupsId },
   }).countDocuments();
+
+  console.log(test.groupsId, totalStudents, "LLLL");
 
   if (!test) return res.status(404).json({ message: "No test found" });
 
@@ -294,6 +296,277 @@ export const getQuestionsOnTest = asyncHandler(async (req, res) => {
     totalDocs: totalDoc,
     docsInThisPage: questionData.length,
     docs: questionData,
+    paginateOptions,
+  };
+
+  res.json(prepareJson);
+});
+
+// @desc get all completedStudent for the test
+// @route GET /tests/:id/getCompletedStudents
+// @access privatete
+export const getCompletedStudents = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const testData = await Test.findById(id);
+
+  if (!testData) return res.status(404).json({ message: "Test not found" });
+
+  const page = +req.query.page || 1;
+  const limit = 10;
+
+  const searchAndFilterQuery = [];
+
+  const search = req.query.search || "";
+
+  const isFilter = req.query.filter;
+
+  if (search) {
+    searchAndFilterQuery.push({
+      studentName: { $regex: search, $options: "i" },
+    });
+  } else {
+    searchAndFilterQuery.push({ studentName: { $regex: "", $options: "i" } });
+  }
+
+  if (isFilter) {
+    const examTypeId = req.query.exam_type || "";
+    const subjectId = req.query.subject || "";
+    const chapterId = req.query.chapter || "";
+    const startDate = req.query.start_date || "";
+    const endDate = req.query.end_date || "";
+    const groupId = req.query.group | "";
+    if (groupId) {
+      searchAndFilterQuery.pust({ groupId: groupId });
+    }
+
+    if (examTypeId) {
+      searchAndFilterQuery.push({ examTypeId: examTypeId });
+    }
+
+    if (subjectId) {
+      searchAndFilterQuery.push({ subjectId: subjectId });
+    }
+
+    if (chapterId) {
+      searchAndFilterQuery.push({ chapterId: chapterId });
+    }
+    if (startDate && endDate) {
+      const a = endDate;
+      const date = +a.split("-")[2] + 1;
+      const monthYear = a.split("-").splice(0, 2);
+      monthYear.push(date);
+      const addedOneDay = monthYear.join("-");
+
+      searchAndFilterQuery.push({
+        createdAt: { $gte: new Date(startDate), $lt: new Date(addedOneDay) },
+      });
+    }
+  }
+
+  const totalFilteredDoc = await Student.find({
+    studentId: { $in: testData.attendedStudentsId },
+    groupId: { $in: testData.groupsId },
+    $and: [
+      ...searchAndFilterQuery,
+      // { examType: { $regex: search, $options: "i" } },
+      //   { examTypeId: { $regex: "", $options: "i" } },
+      //   { createdAt: { $gte: new Date("2024-07-14"), $lte: new Date() } },
+    ],
+  }).countDocuments();
+
+  const totalDoc = await Student.find({
+    studentId: { $in: testData.attendedStudentsId },
+    groupId: { $in: testData.groupsId },
+  }).countDocuments();
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  console.log("startIndex :", startIndex, "endIndex :", endIndex);
+
+  const hasPrevPage = startIndex > 0 ? true : false;
+  const hasNextPage = endIndex < totalFilteredDoc ? true : false;
+
+  const populate = [
+    {
+      path: "enrolledExamType",
+      options: { select: { examType: 1 } },
+    },
+    {
+      path: "group",
+      options: { select: { groupName: 1 } },
+    },
+    // { path: "examType", options: { select: { examType: 1 } } },
+    // { path: "subject", options: { select: { subjectName: 1 } } },
+    // { path: "chapter", options: { select: { chapterName: 1 } } },
+  ];
+
+  const studentData = await Student.find({
+    studentId: { $in: testData.attendedStudentsId },
+    groupId: { $in: testData.groupsId },
+    $and: [
+      ...searchAndFilterQuery,
+      //   { examType: { $regex: search, $options: "i" } },
+      //   { examTypeId: { $regex: "", $options: "i" } },
+      //   { createdAt: { $gte: new Date("2024-07-14"), $lte: new Date() } },
+    ],
+  })
+    .skip(startIndex)
+    .limit(limit)
+    .populate(populate)
+    .lean();
+
+  const totalPage = Math.ceil(totalFilteredDoc / limit);
+
+  const paginateOptions = {
+    currentPage: page,
+    totalPage,
+    hasNextPage,
+    hasPrevPage,
+  };
+
+  const prepareJson = {
+    status: "success",
+    totalDocs: totalDoc,
+    docsInThisPage: studentData.length,
+    docs: studentData,
+    paginateOptions,
+  };
+
+  res.json(prepareJson);
+});
+
+// @desc get all incomplete Student for the test
+// @route GET /tests/:id/getIncompleteStudents
+// @access privatete
+export const getIncompleteStudents = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const testData = await Test.findById(id);
+
+  if (!testData) return res.status(404).json({ message: "Test not found" });
+
+  const page = +req.query.page || 1;
+  const limit = 10;
+
+  const searchAndFilterQuery = [];
+
+  const search = req.query.search || "";
+
+  const isFilter = req.query.filter;
+
+  if (search) {
+    searchAndFilterQuery.push({
+      studentName: { $regex: search, $options: "i" },
+    });
+  } else {
+    searchAndFilterQuery.push({ studentName: { $regex: "", $options: "i" } });
+  }
+
+  if (isFilter) {
+    const examTypeId = req.query.exam_type || "";
+    const subjectId = req.query.subject || "";
+    const chapterId = req.query.chapter || "";
+    const startDate = req.query.start_date || "";
+    const endDate = req.query.end_date || "";
+    const groupId = req.query.group || "";
+
+    if (examTypeId) {
+      searchAndFilterQuery.push({ examTypeId: examTypeId });
+    }
+
+    if (subjectId) {
+      searchAndFilterQuery.push({ subjectId: subjectId });
+    }
+
+    if (chapterId) {
+      searchAndFilterQuery.push({ chapterId: chapterId });
+    }
+    if (groupId) {
+      console.log(groupId, "dd");
+      searchAndFilterQuery.push({ groupId: groupId });
+    }
+    if (startDate && endDate) {
+      const a = endDate;
+      const date = +a.split("-")[2] + 1;
+      const monthYear = a.split("-").splice(0, 2);
+      monthYear.push(date);
+      const addedOneDay = monthYear.join("-");
+
+      searchAndFilterQuery.push({
+        createdAt: { $gte: new Date(startDate), $lt: new Date(addedOneDay) },
+      });
+    }
+  }
+
+  const totalFilteredDoc = await Student.find({
+    studentId: { $nin: testData.attendedStudentsId },
+    groupId: { $in: testData.groupsId },
+    $and: [
+      ...searchAndFilterQuery,
+      // { examType: { $regex: search, $options: "i" } },
+      //   { examTypeId: { $regex: "", $options: "i" } },
+      //   { createdAt: { $gte: new Date("2024-07-14"), $lte: new Date() } },
+    ],
+  }).countDocuments();
+
+  const totalDoc = await Student.find({
+    studentId: { $nin: testData.attendedStudentsId },
+    groupId: { $in: testData.groupsId },
+  }).countDocuments();
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  console.log("startIndex :", startIndex, "endIndex :", endIndex);
+
+  const hasPrevPage = startIndex > 0 ? true : false;
+  const hasNextPage = endIndex < totalFilteredDoc ? true : false;
+
+  const populate = [
+    {
+      path: "enrolledExamType",
+      options: { select: { examType: 1 } },
+    },
+    {
+      path: "group",
+      options: { select: { groupName: 1 } },
+    },
+    // { path: "examType", options: { select: { examType: 1 } } },
+    // { path: "subject", options: { select: { subjectName: 1 } } },
+    // { path: "chapter", options: { select: { chapterName: 1 } } },
+  ];
+
+  const studentData = await Student.find({
+    studentId: { $nin: testData.attendedStudentsId },
+    groupId: { $in: testData.groupsId },
+    $and: [
+      ...searchAndFilterQuery,
+      //   { examType: { $regex: search, $options: "i" } },
+      //   { examTypeId: { $regex: "", $options: "i" } },
+      //   { createdAt: { $gte: new Date("2024-07-14"), $lte: new Date() } },
+    ],
+  })
+    .skip(startIndex)
+    .limit(limit)
+    .populate(populate)
+    .lean();
+
+  const totalPage = Math.ceil(totalFilteredDoc / limit);
+
+  const paginateOptions = {
+    currentPage: page,
+    totalPage,
+    hasNextPage,
+    hasPrevPage,
+  };
+
+  const prepareJson = {
+    status: "success",
+    totalDocs: totalDoc,
+    docsInThisPage: studentData.length,
+    docs: studentData,
     paginateOptions,
   };
 
