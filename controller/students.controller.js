@@ -63,6 +63,9 @@ export const deleteStudent = asyncHandler(async (req, res) => {
 
   if (!student) return res.status(404).json({ message: "No student found" });
 
+  // DELETING ALL ANSWERS GIVEN BY THE STUDENT
+  await Answer.deleteMany({ studentId: student.studentId });
+
   const saveStudent = await student.deleteOne();
 
   res.json(saveStudent);

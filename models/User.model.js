@@ -22,7 +22,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    roll: {
+    rawPassword: {
+      type: String,
+    },
+    role: {
       type: String,
       required: true,
     },

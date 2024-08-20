@@ -503,6 +503,7 @@ export const getIncompleteStudents = asyncHandler(async (req, res) => {
   const totalFilteredDoc = await Student.find({
     studentId: { $nin: testData.attendedStudentsId },
     groupId: { $in: testData.groupsId },
+    enrolledExamTypeId: testData.examTypeId,
     $and: [
       ...searchAndFilterQuery,
       // { examType: { $regex: search, $options: "i" } },
@@ -514,6 +515,7 @@ export const getIncompleteStudents = asyncHandler(async (req, res) => {
   const totalDoc = await Student.find({
     studentId: { $nin: testData.attendedStudentsId },
     groupId: { $in: testData.groupsId },
+    enrolledExamTypeId: testData.examTypeId,
   }).countDocuments();
 
   const startIndex = (page - 1) * limit;
@@ -541,6 +543,7 @@ export const getIncompleteStudents = asyncHandler(async (req, res) => {
   const studentData = await Student.find({
     studentId: { $nin: testData.attendedStudentsId },
     groupId: { $in: testData.groupsId },
+    enrolledExamTypeId: testData.examTypeId,
     $and: [
       ...searchAndFilterQuery,
       //   { examType: { $regex: search, $options: "i" } },
