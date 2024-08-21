@@ -12,12 +12,12 @@ export const logEvents = async (message, logFileName) => {
   const logItem = `${formatDate}\t${crypto.randomUUID()}\t${message}\n`;
 
   try {
-    if (!fs.existsSync(path.join(__dirname, "..", "logs"))) {
+    if (!fs.existsSync(path.join(__dirname, "..", "app-logs"))) {
       await fsPromises.mkdir(path.join(__dirname, "..", "app-logs"));
     }
 
     fsPromises.appendFile(
-      path.join(__dirname, "..", "logs", logFileName),
+      path.join(__dirname, "..", "app-logs", logFileName),
       logItem
     );
   } catch (error) {
