@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Subject from "../models/Subject.model.js";
 import Chapter from "../models/Chapter.model.js";
+import Question from "./../models/Question.model.js";
 
 // @desc add a Subject
 // @route POST /subjects
@@ -47,10 +48,13 @@ export const deleteSubject = asyncHandler(async (req, res) => {
     subjectId: subject?.subjectId,
   }).countDocuments();
 
-  if (isChapter)
+  const isQuestion = await Question.find({
+    subjectId: subject?.subjectId,
+  }).countDocuments();
+
+  if (isChapter || isQuestion)
     return res.status(404).json({
-      message:
-        "Could not delete since exam type has students, subject, chapter  mapped",
+      message: "Could not delete since exam type has  question, chapter",
     });
 
   const deleteSubject = await subject.deleteOne();

@@ -46,6 +46,16 @@ export const deleteChapter = asyncHandler(async (req, res) => {
   if (!chapter)
     return res.status(404).json({ message: "Could not find Chapter" });
 
+  const isQuestion = await Question.find({
+    chapterId: chapter.chapterId,
+  }).countDocuments();
+
+  if (isQuestion) {
+    return res
+      .status(404)
+      .json({ message: "Could not delete chapter as it is maped to question" });
+  }
+
   const deleteChapter = await chapter.deleteOne();
 
   res.json(deleteChapter);

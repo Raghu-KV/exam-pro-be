@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Test from "../models/Test.model.js";
 import Student from "./../models/Student.model.js";
 import Question from "./../models/Question.model.js";
+import Answer from "../models/Answer.model.js";
 
 // @desc add a test
 // @route POST /tests
@@ -52,12 +53,9 @@ export const deleteTest = asyncHandler(async (req, res) => {
 
   if (!testData) return res.status(404).json({ message: "No test found!" });
 
-  if (testData.attendedStudentsId.length) {
-    return res.status(404).json({
-      message: "Could not delete. Students have started attending the test",
-    });
-  }
-
+  await Answer.deleteMany({
+    testId: testData.testId,
+  });
   const deleteMessage = await testData.deleteOne();
 
   res.send(deleteMessage);

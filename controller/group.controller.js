@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import Group from "./../models/Group.model.js";
 
 import Student from "./../models/Student.model.js";
+import Test from "./../models/Test.model.js";
 
 // @desc add a group
 // @route POST /groups
@@ -44,6 +45,21 @@ export const deleteGroup = asyncHandler(async (req, res) => {
   const group = await Group.findById(id);
 
   if (!group) return res.status(404).json({ message: "Could not find group" });
+
+  const isStudent = await Student.find({
+    groupId: group.groupId,
+  }).countDocuments();
+
+  const isTest = await Test.find({
+    groupsId: { $in: [group.groupId] },
+  }).countDocuments();
+
+  if (isStudent || isTest) {
+    return res.status(404).json({
+      message:
+        "Could not delete group since it could have mapped to student or test",
+    });
+  }
 
   const deleteGroupMsg = await group.deleteOne();
 

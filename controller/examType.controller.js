@@ -4,6 +4,10 @@ import ExamType from "../models/ExamType.model.js";
 import Student from "../models/Student.model.js";
 import Subject from "../models/Subject.model.js";
 import Chapter from "./../models/Chapter.model.js";
+import Test from "./../models/Test.model.js";
+import Group from "../models/Group.model.js";
+import Question from "./../models/Question.model.js";
+import InfoCenter from "../models/InfoCenter.model.js";
 
 // @desc add a exam type
 // @route POST /exam-type
@@ -54,13 +58,29 @@ export const deleteExamType = asyncHandler(async (req, res) => {
     examTypeId: examTypeData?.examTypeId,
   }).countDocuments();
 
+  const isTest = await Test.fing({
+    examTypeId: examTypeData?.examTypeId,
+  }).countDocuments();
+
+  const isGroup = await Group.fing({
+    examTypeId: examTypeData?.examTypeId,
+  }).countDocuments();
+
+  const isQuestion = await Question.fing({
+    examTypeId: examTypeData?.examTypeId,
+  }).countDocuments();
+
+  const isInfoCenter = await InfoCenter.fing({
+    examTypeId: examTypeData?.examTypeId,
+  }).countDocuments();
+
   if (!examTypeData)
     return res.status(404).json({ message: "No exam-type found" });
 
-  if (isStudent || isSubject || isChapter)
+  if (isStudent || isSubject || isChapter || isTest || isGroup || isQuestion)
     return res.status(404).json({
       message:
-        "Could not delete since exam type has students, subject, chapter  mapped",
+        "Could not delete since exam type could have students, subject, chapter, test, group, question, info center  mapped",
     });
 
   await examTypeData.deleteOne();
