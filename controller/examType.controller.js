@@ -58,26 +58,34 @@ export const deleteExamType = asyncHandler(async (req, res) => {
     examTypeId: examTypeData?.examTypeId,
   }).countDocuments();
 
-  const isTest = await Test.fing({
+  const isTest = await Test.find({
     examTypeId: examTypeData?.examTypeId,
   }).countDocuments();
 
-  const isGroup = await Group.fing({
+  const isGroup = await Group.find({
     examTypeId: examTypeData?.examTypeId,
   }).countDocuments();
 
-  const isQuestion = await Question.fing({
+  const isQuestion = await Question.find({
     examTypeId: examTypeData?.examTypeId,
   }).countDocuments();
 
-  const isInfoCenter = await InfoCenter.fing({
+  const isInfoCenter = await InfoCenter.find({
     examTypeId: examTypeData?.examTypeId,
   }).countDocuments();
 
   if (!examTypeData)
     return res.status(404).json({ message: "No exam-type found" });
 
-  if (isStudent || isSubject || isChapter || isTest || isGroup || isQuestion)
+  if (
+    isStudent ||
+    isSubject ||
+    isChapter ||
+    isTest ||
+    isGroup ||
+    isQuestion ||
+    isInfoCenter
+  )
     return res.status(404).json({
       message:
         "Could not delete since exam type could have students, subject, chapter, test, group, question, info center  mapped",
