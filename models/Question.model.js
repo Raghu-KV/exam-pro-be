@@ -52,6 +52,14 @@ const questionSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    imageFullUrl: {
+      type: String,
+      required: false,
+    },
+    imageShortUrl: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

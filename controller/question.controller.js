@@ -1,6 +1,33 @@
 import asyncHandler from "express-async-handler";
 
 import Question from "../models/Question.model.js";
+import { v2 as cloudinary } from "cloudinary";
+
+// CLOUDINARY CONFIG --------- for image upload
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
+
+// @desc get  cloudinary siganature for image uplaod
+// @route POST /questions/generateSignature
+// @access private
+export const generateCloudinarySign = asyncHandler(async (req, res) => {
+  const folder = "question-images";
+
+  const timestamp = Math.floor(Date.now() / 1000);
+  const signature = cloudinary.utils.api_sign_request(
+    {
+      timestamp,
+      folder,
+    },
+    process.env.CLOUDINARY_API_SECRET
+  );
+
+  res.json({ timestamp, signature });
+});
 
 // @desc add a question
 // @route POST /questions
@@ -14,6 +41,8 @@ export const addQuestion = asyncHandler(async (req, res) => {
     subjectId,
     examTypeId,
     explanation,
+    imageFullUrl,
+    imageShortUrl,
   } = req.body;
 
   const result = await Question.create({
@@ -24,6 +53,8 @@ export const addQuestion = asyncHandler(async (req, res) => {
     subjectId,
     examTypeId,
     explanation,
+    imageFullUrl,
+    imageShortUrl,
   });
 
   res.json(result);
@@ -42,6 +73,8 @@ export const editQuestion = asyncHandler(async (req, res) => {
     subjectId,
     examTypeId,
     explanation,
+    imageFullUrl,
+    imageShortUrl,
   } = req.body;
 
   const questionData = await Question.findById(id);
@@ -56,6 +89,8 @@ export const editQuestion = asyncHandler(async (req, res) => {
   questionData.examTypeId = examTypeId;
   questionData.subjectId = subjectId;
   questionData.explanation = explanation;
+  questionData.imageFullUrl = imageFullUrl;
+  questionData.imageShortUrl = imageShortUrl;
   const updatedQuestion = await questionData.save();
 
   res.json(updatedQuestion);

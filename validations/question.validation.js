@@ -14,6 +14,8 @@ export const postQuestionSchema = Joi.object({
   subjectId: Joi.string().required(),
   examTypeId: Joi.string().required(),
   explanation: Joi.string().allow(""),
+  imageFullUrl: Joi.string().allow(""),
+  imageShortUrl: Joi.string().allow(""),
 });
 
 export const patchQuestionSchema = Joi.object({
@@ -34,6 +36,8 @@ export const patchQuestionSchema = Joi.object({
   subjectId: Joi.string().required(),
   examTypeId: Joi.string().required(),
   explanation: Joi.string().allow(""),
+  imageFullUrl: Joi.string().allow(""),
+  imageShortUrl: Joi.string().allow(""),
 });
 
 export const deleteQuestionSchema = Joi.object({

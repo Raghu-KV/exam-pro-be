@@ -9,6 +9,7 @@ import {
   addQuestion,
   deleteQuestion,
   editQuestion,
+  generateCloudinarySign,
   getAllQuestions,
   getSingleQuestion,
 } from "../controller/question.controller.js";
@@ -23,6 +24,8 @@ router
   .route("/")
   .get(getAllQuestions)
   .post(joiValidation(postQuestionSchema), addQuestion);
+
+router.route("/generateSignature").post(generateCloudinarySign);
 
 router
   .route("/:id")
