@@ -21,7 +21,7 @@ export const generateCloudinarySign = asyncHandler(async (req, res) => {
   const signature = cloudinary.utils.api_sign_request(
     {
       timestamp,
-      // folder,
+      folder,
     },
     process.env.CLOUDINARY_API_SECRET
   );
