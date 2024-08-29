@@ -109,7 +109,7 @@ export const getStudentDeatilView = asyncHandler(async (req, res) => {
   }
 
   const studentId = foundStudent.studentId;
-  const examTypeId = foundStudent.examTypeId;
+  const examTypeId = foundStudent.enrolledExamTypeId;
   const groupId = foundStudent.groupId;
 
   // const studentData = await Student.findOne({ studentId })

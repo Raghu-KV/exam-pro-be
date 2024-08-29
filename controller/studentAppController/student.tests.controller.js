@@ -308,7 +308,12 @@ export const getSingleTest = asyncHandler(async (req, res) => {
   const studentId = req.studentId;
   const groupId = req.groupId;
 
-  const populate = [{ path: "questions", select: "question options" }];
+  const populate = [
+    {
+      path: "questions",
+      select: "question options imageFullUrl imageShortUrl",
+    },
+  ];
 
   const test = await Test.findById(id)
     .populate(populate)
