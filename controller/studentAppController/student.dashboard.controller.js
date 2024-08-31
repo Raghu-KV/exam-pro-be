@@ -34,6 +34,7 @@ export const studentDashboard = asyncHandler(async (req, res) => {
     {
       $match: {
         studentId: studentId, // Replace <current_student_id> with the actual student ID
+        examTypeId: examTypeId,
       },
     },
     {
